@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[]){
 	if(argc < 2){
-		printf("Usage: <filename>.ec [--debug]\n");
+		printf("Usage: <filename>.cl [--debug]\n");
 		return 1;
 	}
 	if (argc >=3 && strcmp(argv[2], "--debug")==0){
