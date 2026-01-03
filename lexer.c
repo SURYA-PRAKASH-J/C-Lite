@@ -60,6 +60,16 @@ Token lexer_next_token(Lexer *lexer){
 		}
 		return token;
 	}
+	if(lexer->current_char == '-'){
+		lexer_advance(lexer);
+		token.type = TOKEN_MINUS;
+		return token;
+	}
+	if(lexer->current_char == '+'){
+		lexer_advance(lexer);
+		token.type = TOKEN_PLUS;
+		return token;
+	}
 	if (lexer->current_char == '='){
 		lexer_advance(lexer);
 		if (lexer->current_char == '='){
