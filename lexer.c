@@ -86,6 +86,16 @@ Token lexer_next_token(Lexer *lexer){
 		token.type = TOKEN_DIVIDE;
 		return token;
 	}
+	if(lexer->current_char == '('){
+		lexer_advance(lexer);
+		token.type = TOKEN_OPEN_PAREN;
+		return token;
+	}
+	if(lexer->current_char == ')'){
+		lexer_advance(lexer);
+		token.type = TOKEN_CLOSE_PAREN;
+		return token;
+	}
 
 	if (lexer->current_char == '='){
 		lexer_advance(lexer);

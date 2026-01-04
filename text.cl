@@ -1,6 +1,4 @@
-int a = 10 -3;
-a=a-2;
-int b = 10;
-// comemntsjdguksdfg
-a = a + -2;
-
+int a = (2 + 3) * 4;        // 20
+int b = -(a - 10);         // -10
+int c = (a + b) / 2;       // 5
+int d = -(-(-5));          // -5

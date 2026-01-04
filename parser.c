@@ -6,8 +6,7 @@
 static Symbol symbols[128];
 static int symbol_count = 0;
 
-
-static int symbol_find(const char *name){
+int symbol_find(const char *name){
         for(int i = 0; i < symbol_count; i++){
             //printf ("strcmp(symbols[i].name, name) -> %d",strcmp(symbols[i].name, name));
             if(strcmp(symbols[i].name, name) == 0){
@@ -17,9 +16,15 @@ static int symbol_find(const char *name){
         return -1;
 }
 
-static int parse_factor(Parser *parser){
+int parse_factor(Parser *parser){
     int value;
     printf("DEBUG: parse_factor sees : %d\n", parser->current_token.type);
+    if(parser->current_token.type == TOKEN_OPEN_PAREN){
+        parser_expect(parser, TOKEN_OPEN_PAREN);
+        value = parse_expression(parser);
+        parser_expect(parser, TOKEN_CLOSE_PAREN);
+        return value;
+    }
     if(parser->current_token.type == TOKEN_MINUS){
         parser_expect(parser, TOKEN_MINUS);
         return -parse_factor(parser);
@@ -41,7 +46,7 @@ static int parse_factor(Parser *parser){
     exit(1);
 }
 
-static int parse_term(Parser *parser){
+int parse_term(Parser *parser){
     int value = parse_factor(parser);
 
     while(parser->current_token.type == TOKEN_MULTPLY || parser->current_token.type == TOKEN_DIVIDE){
@@ -61,7 +66,7 @@ static int parse_term(Parser *parser){
     return value;
 }
 
-static int parse_expression(Parser *parser){
+int parse_expression(Parser *parser){
     int value = parse_term(parser);
     while (parser->current_token.type == TOKEN_PLUS || parser->current_token.type == TOKEN_MINUS){
         TokenType op = parser->current_token.type;
