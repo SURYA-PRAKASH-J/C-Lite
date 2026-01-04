@@ -32,7 +32,7 @@ typedef enum{
 	TOKEN_PLUS,
 	TOKEN_MINUS,
 	TOKEN_MULTPLY,
-	TOKEN_DIVIDE
+	TOKEN_DIVIDE	
 } TokenType;
 
 typedef struct{

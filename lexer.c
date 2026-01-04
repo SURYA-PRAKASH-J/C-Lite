@@ -70,6 +70,23 @@ Token lexer_next_token(Lexer *lexer){
 		token.type = TOKEN_PLUS;
 		return token;
 	}
+	if(lexer->current_char == '*'){
+		lexer_advance(lexer);
+		token.type = TOKEN_MULTPLY;
+		return token;
+	}
+	if(lexer->current_char == '/'){
+		lexer_advance(lexer);
+		if(lexer->current_char == '/'){
+			while (lexer->current_char != '\n'&& lexer->current_char != EOF){
+				lexer_advance(lexer);
+			}
+			return lexer_next_token(lexer);
+		}
+		token.type = TOKEN_DIVIDE;
+		return token;
+	}
+
 	if (lexer->current_char == '='){
 		lexer_advance(lexer);
 		if (lexer->current_char == '='){

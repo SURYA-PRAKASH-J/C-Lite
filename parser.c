@@ -17,13 +17,12 @@ static int symbol_find(const char *name){
         return -1;
 }
 
-static int parse_term(Parser *parser){
+static int parse_factor(Parser *parser){
     int value;
-    printf("DEBUG: parse_term sees : %d\n", parser->current_token.type);
+    printf("DEBUG: parse_factor sees : %d\n", parser->current_token.type);
     if(parser->current_token.type == TOKEN_MINUS){
         parser_expect(parser, TOKEN_MINUS);
-        value = parser->current_token.value.int_value;
-        return -value;
+        return -parse_factor(parser);
 
     }
     if(parser->current_token.type == TOKEN_INTEGER){
@@ -40,6 +39,26 @@ static int parse_term(Parser *parser){
     }
     printf("Error: Unexpected term::%d\n", parser->current_token.type);
     exit(1);
+}
+
+static int parse_term(Parser *parser){
+    int value = parse_factor(parser);
+
+    while(parser->current_token.type == TOKEN_MULTPLY || parser->current_token.type == TOKEN_DIVIDE){
+        TokenType op = parser->current_token.type;
+        parser_expect(parser, op);
+        int rhs = parse_factor(parser);
+        if(op == TOKEN_MULTPLY){
+            value *= rhs;
+        }else{
+            if(rhs == 0){
+                printf("Error: division by zero\n");
+                exit(1);
+            }
+            value /= rhs;
+        }
+    }
+    return value;
 }
 
 static int parse_expression(Parser *parser){

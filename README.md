@@ -145,4 +145,3 @@ Surya Prakash
 
 ---
 
-> "If you don’t understand how a compiler works, you don’t really understand a programming language."
