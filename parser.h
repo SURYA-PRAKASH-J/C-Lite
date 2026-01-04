@@ -14,11 +14,6 @@ void parser_expect(Parser *parser, TokenType type);
 
 void parse_program(Parser *parser);
 
-int parse_expression(Parser *parser);
-int parse_term(Parser *parser);
-int parse_factor(Parser *parser);
-int symbol_find(const char *name);
-
 //SYbol table 
 typedef struct{
 	char name[64];

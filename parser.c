@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
+#include "expr.h"
 static Symbol symbols[128];
 static int symbol_count = 0;
 
@@ -16,73 +16,7 @@ int symbol_find(const char *name){
         return -1;
 }
 
-int parse_factor(Parser *parser){
-    int value;
-    printf("DEBUG: parse_factor sees : %d\n", parser->current_token.type);
-    if(parser->current_token.type == TOKEN_OPEN_PAREN){
-        parser_expect(parser, TOKEN_OPEN_PAREN);
-        value = parse_expression(parser);
-        parser_expect(parser, TOKEN_CLOSE_PAREN);
-        return value;
-    }
-    if(parser->current_token.type == TOKEN_MINUS){
-        parser_expect(parser, TOKEN_MINUS);
-        return -parse_factor(parser);
 
-    }
-    if(parser->current_token.type == TOKEN_INTEGER){
-        value = parser->current_token.value.int_value;
-        parser_expect(parser, TOKEN_INTEGER);
-        return value;
-    }
-
-    if(parser->current_token.type == TOKEN_IDENTIFIER){
-        char name[64];
-        strcpy(name, parser->current_token.value.ident);
-        parser_expect(parser, TOKEN_IDENTIFIER);
-        return symbol_get(name);
-    }
-    printf("Error: Unexpected term::%d\n", parser->current_token.type);
-    exit(1);
-}
-
-int parse_term(Parser *parser){
-    int value = parse_factor(parser);
-
-    while(parser->current_token.type == TOKEN_MULTPLY || parser->current_token.type == TOKEN_DIVIDE){
-        TokenType op = parser->current_token.type;
-        parser_expect(parser, op);
-        int rhs = parse_factor(parser);
-        if(op == TOKEN_MULTPLY){
-            value *= rhs;
-        }else{
-            if(rhs == 0){
-                printf("Error: division by zero\n");
-                exit(1);
-            }
-            value /= rhs;
-        }
-    }
-    return value;
-}
-
-int parse_expression(Parser *parser){
-    int value = parse_term(parser);
-    while (parser->current_token.type == TOKEN_PLUS || parser->current_token.type == TOKEN_MINUS){
-        TokenType op = parser->current_token.type;
-        parser_expect(parser, op);
-        int rhs = parse_term(parser);
-        if(op == TOKEN_PLUS)
-        {
-            value += rhs;
-        }
-        else{
-            value -= rhs;
-        }
-    }
-    return value;
-
-}
 
 static void parse_var_decl(Parser *parser){
     parser_expect(parser, TOKEN_INT);

@@ -10,7 +10,10 @@ static TokenType keyword_mapping(const char *ident){
 	if(strcmp(ident, "if") == 0) return TOKEN_IF;
 	if(strcmp(ident, "else") == 0) return TOKEN_ELSE;
 	if(strcmp(ident, "while") == 0) return TOKEN_WHILE;
-	if(strcmp(ident, "RETURN") == 0) return TOKEN_RETURN;
+	if(strcmp(ident, "return") == 0) return TOKEN_RETURN;
+	if(strcmp(ident, "true") == 0) return TOKEN_TRUE;
+	if(strcmp(ident, "false") == 0) return TOKEN_FALSE;
+
 	return TOKEN_IDENTIFIER;
 }
 
@@ -96,11 +99,41 @@ Token lexer_next_token(Lexer *lexer){
 		token.type = TOKEN_CLOSE_PAREN;
 		return token;
 	}
-
+	if(lexer->current_char == '!'){
+		lexer_advance(lexer);
+		if(lexer->current_char == '='){
+			lexer_advance(lexer);
+			token.type = TOKEN_NOTEQ;
+			return token;
+		}
+		token.type = TOKEN_NOT;
+		return token;
+	}
+	if(lexer->current_char == '<'){
+		lexer_advance(lexer);
+		if(lexer->current_char == '='){
+			lexer_advance(lexer);
+			token.type = TOKEN_LESS_THAN_OR_EQ;
+			return token;
+		}
+		token.type = TOKEN_LESS_THAN;
+		return token;
+	}
+	if(lexer->current_char == '>'){
+		lexer_advance(lexer);
+		if(lexer->current_char == '='){
+			lexer_advance(lexer);
+			token.type = TOKEN_GREAT_THAN_OR_EQ;
+			return token;
+		}
+		token.type = TOKEN_GREATER_THAN;
+		return token;
+	}
 	if (lexer->current_char == '='){
 		lexer_advance(lexer);
 		if (lexer->current_char == '='){
 			DEBUG_PRINT("found '=='\n");
+			lexer_advance(lexer);
 			token.type = TOKEN_EQUALS;
 			return token;
 		}
