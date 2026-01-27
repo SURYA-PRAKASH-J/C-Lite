@@ -7,6 +7,7 @@ int LEXER_DEBUG = 0;
 
 static TokenType keyword_mapping(const char *ident){
 	if(strcmp(ident, "int") == 0) return TOKEN_INT;
+	if(strcmp(ident, "bool") == 0) return TOKEN_BOOL;
 	if(strcmp(ident, "if") == 0) return TOKEN_IF;
 	if(strcmp(ident, "else") == 0) return TOKEN_ELSE;
 	if(strcmp(ident, "while") == 0) return TOKEN_WHILE;

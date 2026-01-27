@@ -45,8 +45,31 @@ It *is* meant to be correct, clear, and instructive.
     ```c
     a = 11;
     ```
-* Debug mode to trace lexer behavior
+* Expression parsing (`+ - * /`):
 
+  * Supports comments with '//'
+  * Supports basic mathematical operations with basic precedence and paranthesis
+    ```c
+    int a = 10 + 10 - 5;
+    int b = (a / 15) * 3;
+    // comments works too
+    ```
+
+* Supports boolean operations based on 0 [false] and 1 [true]
+* Supports Comparative operators:
+  ```c
+     int a = 10 < 5; // a will be 0
+  ```
+* Supported Comparative Operations:
+
+  * Greater Than ( > )
+  * Lesser Than ( < )
+  * Greater Than or Equal To ( >= )
+  * Lesser Than or Equal To ( <= )
+  * Equals To ( == )
+  * Not Equals TO ( != )
+
+* Debug mode to trace lexer behavior
 ---
 
 ## Example Program
@@ -110,7 +133,6 @@ C‑Lite is written the way **early compilers were written**: explicitly and inc
 ## Planned Features
 
 * Symbol table (variable storage)
-* Expression parsing (`+ - * /`)
 * Operator precedence
 * Conditional statements (`if`)
 * While loops

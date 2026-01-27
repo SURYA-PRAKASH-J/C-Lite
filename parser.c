@@ -15,18 +15,48 @@ int symbol_find(const char *name){
         }
         return -1;
 }
+void symbol_add(const char *name, int value, VarType type){
+    printf("%d\n", symbol_find(name));
+    if(symbol_find(name) != -1){
+        printf("Error: Variable decalred with same name\n");
+        exit(1);
+    }
+    strcpy(symbols[symbol_count].name, name);
+    symbols[symbol_count].value = value;
+    symbols[symbol_count].type = type;
+    symbol_count++;
+    DEBUG_PRINT("SYMBOL ADDED\n");
+}
+
+int symbol_get(const char *name){
+    int i = symbol_find(name);
+    if(i==-1){
+        printf("Error: undefined variable %s\n", name);
+        exit(1);
+    }
+    return symbols[i].value;
+}
+
+void symbol_set(const char *name, int value){
+    int i = symbol_find(name);
+    if(i==-1){
+        printf("Error: undefined variable %s\n", name);
+        exit(1);
+    }
+    symbols[i].value = value;
+}
 
 
-
-static void parse_var_decl(Parser *parser){
-    parser_expect(parser, TOKEN_INT);
+static void parse_var_decl(Parser *parser, TokenType type){
+    VarType var_type = (type == TOKEN_BOOL) ? TYPE_BOOL : TYPE_INT;
+    parser_expect(parser, type);
     char name[64];
     strcpy(name, parser->current_token.value.ident);
     parser_expect(parser, TOKEN_IDENTIFIER);
     parser_expect(parser, TOKEN_ASSIGN);
     int value = parse_expression(parser);
     parser_expect(parser, TOKEN_SEMICOLON);
-    symbol_add(name, value);
+    symbol_add(name, value, var_type);
 }
 
 static void parse_assignment_statement(Parser *parser){
@@ -44,7 +74,10 @@ static void parse_assignment_statement(Parser *parser){
 void parse_statement(Parser* parser){
     switch (parser->current_token.type) {
         case TOKEN_INT:
-            parse_var_decl(parser);
+            parse_var_decl(parser, TOKEN_INT);
+            break;
+        case TOKEN_BOOL:
+            parse_var_decl(parser, TOKEN_BOOL);
             break;
         case TOKEN_IDENTIFIER:
             parse_assignment_statement(parser);
@@ -87,32 +120,3 @@ void parse_program(Parser *parser){
 }
 
 
-void symbol_add(const char *name, int value){
-    printf("%d\n", symbol_find(name));
-    if(symbol_find(name) != -1){
-        printf("Error: Variable decalred with same name\n");
-        exit(1);
-    }
-    strcpy(symbols[symbol_count].name, name);
-    symbols[symbol_count].value = value;
-    symbol_count++;
-    DEBUG_PRINT("SYMBOL ADDED\n");
-}
-
-int symbol_get(const char *name){
-    int i = symbol_find(name);
-    if(i==-1){
-        printf("Error: undefined variable %s\n", name);
-        exit(1);
-    }
-    return symbols[i].value;
-}
-
-void symbol_set(const char *name, int value){
-    int i = symbol_find(name);
-    if(i==-1){
-        printf("Error: undefined variable %s\n", name);
-        exit(1);
-    }
-    symbols[i].value = value;
-}
