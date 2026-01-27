@@ -133,7 +133,6 @@ C‑Lite is written the way **early compilers were written**: explicitly and inc
 ## Planned Features
 
 * Symbol table (variable storage)
-* Operator precedence
 * Conditional statements (`if`)
 * While loops
 * AST representation
