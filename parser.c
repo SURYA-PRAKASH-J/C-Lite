@@ -16,7 +16,7 @@ int symbol_find(const char *name){
         return -1;
 }
 void symbol_add(const char *name, int value, VarType type){
-    printf("%d\n", symbol_find(name));
+    printf("isSymbolFound: %d\n", symbol_find(name));
     if(symbol_find(name) != -1){
         printf("Error: Variable decalred with same name\n");
         exit(1);
