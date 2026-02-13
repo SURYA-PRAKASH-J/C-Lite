@@ -100,6 +100,15 @@ C-Lite/
 
 This project is built with **gcc**.
 
+I have Makefile too.
+
+to compile:
+
+```
+make
+```
+or
+
 ```bash
 gcc -Wall -Wextra -o out main.c lexer.c parser.c expr.c
 ```
