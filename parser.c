@@ -70,15 +70,15 @@ static void parse_assignment_statement(Parser *parser){
 }
 
 static void parse_block(Parser* parser){
-    parser_expect(parser, TOKEN_OPEN_PAREN);
+    parser_expect(parser, TOKEN_OPEN_BRACES);
 
-    while (parser->current_token.type != TOKEN_CLOSE_PAREN){
+    while (parser->current_token.type != TOKEN_CLOSE_BRACES){
         parse_statement(parser);
         if(parser->current_token.type == EOF){
             printf("Error: Expected '}' before EOF");
         }
     }
-    parser_expect(parser, TOKEN_CLOSE_PAREN);
+    parser_expect(parser, TOKEN_CLOSE_BRACES);
 }
 
 void parse_statement(Parser* parser){
@@ -93,7 +93,7 @@ void parse_statement(Parser* parser){
             parse_assignment_statement(parser);
             printf("Parsed Assignment statemnt\n");
             break;
-        case TOKEN_OPEN_PAREN:
+        case TOKEN_OPEN_BRACES:
             parse_block(parser);
             break;
         default:
@@ -101,6 +101,7 @@ void parse_statement(Parser* parser){
             exit(1);
     }
 }
+
 
 void parser_init(Parser *parser, Lexer *lexer){
     parser->lexer = lexer;

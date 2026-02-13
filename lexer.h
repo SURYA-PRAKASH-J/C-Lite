@@ -43,7 +43,9 @@ typedef enum{
 	TOKEN_GREAT_THAN_OR_EQ,
 	TOKEN_TRUE,
 	TOKEN_FALSE,
-	TOKEN_BOOL
+	TOKEN_BOOL,
+	TOKEN_OPEN_BRACES,
+	TOKEN_CLOSE_BRACES
 } TokenType;
 
 typedef struct{
