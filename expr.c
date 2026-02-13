@@ -78,7 +78,7 @@ static int parse_addition(Parser *parser){
 }
 
 int parse_expression(Parser *parser){
-    parse_comparision(parser);
+    return  parse_comparision(parser);
 }
 
 static int parse_comparision(Parser *parser){
