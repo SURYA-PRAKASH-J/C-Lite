@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -Wall -std=c++17
 
-TARGET = out
+TARGET = out.o
 
 SRC = main.c lexer.c parser.c expr.c
 OBJ = $(SRC:.cpp=.o)
