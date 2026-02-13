@@ -69,7 +69,17 @@ static void parse_assignment_statement(Parser *parser){
     symbol_set(name, value);
 }
 
+static void parse_block(Parser* parser){
+    parser_expect(parser, TOKEN_OPEN_PAREN);
 
+    while (parser->current_token.type != TOKEN_CLOSE_PAREN){
+        parse_statement(parser);
+        if(parser->current_token.type == EOF){
+            printf("Error: Expected '}' before EOF");
+        }
+    }
+    parser_expect(parser, TOKEN_CLOSE_PAREN);
+}
 
 void parse_statement(Parser* parser){
     switch (parser->current_token.type) {
@@ -83,7 +93,9 @@ void parse_statement(Parser* parser){
             parse_assignment_statement(parser);
             printf("Parsed Assignment statemnt\n");
             break;
-
+        case TOKEN_OPEN_PAREN:
+            parse_block(parser);
+            break;
         default:
             printf("Parse Error: Unexpected token %d\n", parser->current_token.type);
             exit(1);
