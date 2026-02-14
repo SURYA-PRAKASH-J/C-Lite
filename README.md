@@ -69,7 +69,14 @@ It *is* meant to be correct, clear, and instructive.
   * Equals To ( == )
   * Not Equals TO ( != )
 
-* Debug mode to trace lexer behavior
+* Supports basic 'if' statements
+  ```c
+  if(0){ 
+    statements;
+  }
+  ```
+
+* Debug mode to trace lexer behavior [use  ```out.o text.cl --debug```]
 ---
 
 ## Example Program
@@ -141,8 +148,6 @@ C‑Lite is written the way **early compilers were written**: explicitly and inc
 
 ## Planned Features
 
-* Symbol table (variable storage)
-* Conditional statements (`if`)
 * While loops
 * AST representation
 * Optional interpreter or IR generation

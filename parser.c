@@ -45,8 +45,44 @@ void symbol_set(const char *name, int value){
     }
     symbols[i].value = value;
 }
+static void parse_block(Parser* parser){
+    parser_expect(parser, TOKEN_OPEN_BRACES);
 
+    while (parser->current_token.type != TOKEN_CLOSE_BRACES){
+        parse_statement(parser);
+        if(parser->current_token.type == EOF){
+            printf("Error: Expected '}' before EOF");
+        }
+    }
+    parser_expect(parser, TOKEN_CLOSE_BRACES);
+}
+static void parse_if_statement(Parser *parser){
+    parser_expect(parser, TOKEN_IF);
+    int condition;
+    if(parser->current_token.type == TOKEN_OPEN_BRACES){
+        parser_expect(parser, TOKEN_OPEN_BRACES);
+        condition = parse_expression(parser);
+        parser_expect(parser, TOKEN_CLOSE_BRACES);
+    }else{
+        condition = parse_expression(parser);
+    }
+    if(condition != 0){
+        parse_block(parser);
+    }else{
+        parser_expect(parser, TOKEN_OPEN_BRACES);
 
+        int brace_depth = 1;
+        while(brace_depth > 0){
+            if(parser->current_token.type == TOKEN_OPEN_BRACES){
+                brace_depth++;
+            }else if (parser->current_token.type == TOKEN_CLOSE_BRACES){
+                brace_depth--;
+            }
+            parser_advance(parser);
+        }
+    }
+
+}
 static void parse_var_decl(Parser *parser, TokenType type){
     VarType var_type = (type == TOKEN_BOOL) ? TYPE_BOOL : TYPE_INT;
     parser_expect(parser, type);
@@ -69,17 +105,6 @@ static void parse_assignment_statement(Parser *parser){
     symbol_set(name, value);
 }
 
-static void parse_block(Parser* parser){
-    parser_expect(parser, TOKEN_OPEN_BRACES);
-
-    while (parser->current_token.type != TOKEN_CLOSE_BRACES){
-        parse_statement(parser);
-        if(parser->current_token.type == EOF){
-            printf("Error: Expected '}' before EOF");
-        }
-    }
-    parser_expect(parser, TOKEN_CLOSE_BRACES);
-}
 
 void parse_statement(Parser* parser){
     switch (parser->current_token.type) {
@@ -95,6 +120,9 @@ void parse_statement(Parser* parser){
             break;
         case TOKEN_OPEN_BRACES:
             parse_block(parser);
+            break;
+        case TOKEN_IF:
+            parse_if_statement(parser);
             break;
         default:
             printf("Parse Error: Unexpected token %d\n", parser->current_token.type);
