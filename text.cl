@@ -10,6 +10,6 @@ bool x = 1;
 }
 int m = 1000;
 
-if (x){
+if x{
     a = a + 1;
 }

@@ -71,10 +71,11 @@ It *is* meant to be correct, clear, and instructive.
 
 * Supports basic 'if' statements
   ```c
-  if(0){ 
+  if 0{ 
     statements;
   }
   ```
+  - The expression can be with or without paranthesis ' () '
 
 * Debug mode to trace lexer behavior [use  ```out.o text.cl --debug```]
 ---
