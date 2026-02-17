@@ -70,16 +70,15 @@ It *is* meant to be correct, clear, and instructive.
   * Not Equals TO ( != )
 
 * Supports basic 'if' statements
+  
   ```c
   if 0{ 
     statements;
   }
   ```
+
   - The expression can be with or without paranthesis ' () '
-
-
 * Debug mode to trace lexer behavior [use  ```out.o text.cl --debug```]
----
 
 ## Example Program
 
