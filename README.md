@@ -40,15 +40,18 @@ It *is* meant to be correct, clear, and instructive.
     ```c
     int a = 10;
     ```
+
   * Assignment statement
 
     ```c
     a = 11;
     ```
+
 * Expression parsing (`+ - * /`):
 
   * Supports comments with '//'
   * Supports basic mathematical operations with basic precedence and paranthesis
+
     ```c
     int a = 10 + 10 - 5;
     int b = (a / 15) * 3;
@@ -57,9 +60,11 @@ It *is* meant to be correct, clear, and instructive.
 
 * Supports boolean operations based on 0 [false] and 1 [true]
 * Supports Comparative operators:
+  
   ```c
      int a = 10 < 5; // a will be 0
   ```
+
 * Supported Comparative Operations:
 
   * Greater Than ( > )
@@ -68,6 +73,15 @@ It *is* meant to be correct, clear, and instructive.
   * Lesser Than or Equal To ( <= )
   * Equals To ( == )
   * Not Equals TO ( != )
+
+* Supports Print statement
+  * use *echo*
+  
+  ```c
+  int a = 15;
+  echo a; //prints 15
+  echo a+5; //prints 20
+  ```
 
 * Supports basic 'if' statements
   

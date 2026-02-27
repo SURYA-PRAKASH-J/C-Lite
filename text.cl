@@ -10,7 +10,7 @@ bool x = 1;
 }
 int m = 1000;
 
-if m==0{
+if 01{
     a = a + 1;
 }
 echo a;
