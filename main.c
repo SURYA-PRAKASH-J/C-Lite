@@ -4,7 +4,11 @@
 #include "lexer.h"
 #include "parser.h"
 
-
+/*
+Hmm, cool.
+VERSION = 1.0.?
+I didn't keep track initaially my bad
+*/
 int main(int argc, char *argv[]){
 	if(argc < 2){
 		printf("Usage: <filename>.cl [--debug]\n");
