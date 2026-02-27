@@ -116,13 +116,13 @@ Planned improvements:
 ### Documentation
 
 Detailed language specification and design notes can be found in the docs/ directory.
-**Note:** Docs under development 
+**Note:** Docs under development
 
 ### Contributions
 
 - Surya Prakash J [obviously me]
 
-Contributions, issues, and feature requests are welcome! 
+Contributions, issues, and feature requests are welcome!
 Feel free to fork the repo and submit a pull request.
 
 ### License

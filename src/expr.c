@@ -103,6 +103,7 @@ static int parse_comparision(Parser *parser){
         case TOKEN_GREATER_THAN: left = (left > right); break;
         case TOKEN_LESS_THAN_OR_EQ: left = (left <= right); break;
         case TOKEN_GREAT_THAN_OR_EQ: left = (left >= right); break; 
+        default: break;
         }
     }
     return left;

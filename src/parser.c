@@ -50,7 +50,7 @@ static void parse_block(Parser* parser){
 
     while (parser->current_token.type != TOKEN_CLOSE_BRACES){
         parse_statement(parser);
-        if(parser->current_token.type == EOF){
+        if(parser->current_token.type == TOKEN_EOF){
             printf("Error: Expected '}' before EOF");
         }
     }

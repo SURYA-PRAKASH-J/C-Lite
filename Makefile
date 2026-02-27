@@ -1,1 +1,10 @@
-gcc -Wall -Wextra -o out main.c lexer.c parser.c expr.c
+CC = gcc
+CFLAGS = -Wall -Wextra
+SRC = src/main.c src/lexer.c src/parser.c src/expr.c
+OUT = out
+
+all:
+	$(CC) $(CFLAGS) -o $(OUT) $(SRC)
+
+clean:
+	rm -f $(OUT)
