@@ -8,6 +8,10 @@
 Hmm, cool.
 VERSION = 1.0.?
 I didn't keep track initaially, my bad
+
+
+Updating this everytime i get a segfaults from now on [added pretty late but i rememebered the count]
+SEGFAULTs = 3
 */
 int main(int argc, char *argv[]){
 	if(argc < 2){
