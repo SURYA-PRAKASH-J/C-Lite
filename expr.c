@@ -11,7 +11,7 @@ static int parse_comparision(Parser *parser);
 
 int parse_factor(Parser *parser){
     int value;
-    printf("DEBUG: parse_factor sees : %d\n", parser->current_token.type);
+    DEBUG_PRINT("DEBUG: parse_factor sees : %d\n", parser->current_token.type);
     if(parser->current_token.type == TOKEN_OPEN_PAREN){
         parser_expect(parser, TOKEN_OPEN_PAREN);
         value = parse_expression(parser);
@@ -35,7 +35,7 @@ int parse_factor(Parser *parser){
         parser_expect(parser, TOKEN_IDENTIFIER);
         return symbol_get(name);
     }
-    printf("Error: Unexpected term::%d\n", parser->current_token.type);
+    DEBUG_PRINT("Error: Unexpected term::%d\n", parser->current_token.type);
     exit(1);
 }
 

@@ -2,8 +2,13 @@
 
 #define LEXER_H
 #define MAX_IDENT_LEN 64
-#define DEBUG_PRINT(...) \
-    do { if (LEXER_DEBUG) printf("DEBUG: " __VA_ARGS__); } while (0)
+#if LEXER_DEBUG
+    #define DEBUG_PRINT(fmt, ...) \
+        printf("DEBUG: " fmt, ##__VA_ARGS__)
+#else
+    #define DEBUG_PRINT(fmt, ...) \
+        ((void)0)
+#endif
 
 #include <stdio.h>
 
@@ -45,7 +50,8 @@ typedef enum{
 	TOKEN_FALSE,
 	TOKEN_BOOL,
 	TOKEN_OPEN_BRACES,
-	TOKEN_CLOSE_BRACES
+	TOKEN_CLOSE_BRACES,
+	TOKEN_ECHO
 } TokenType;
 
 typedef struct{

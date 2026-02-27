@@ -16,7 +16,7 @@ int symbol_find(const char *name){
         return -1;
 }
 void symbol_add(const char *name, int value, VarType type){
-    printf("isSymbolFound: %d\n", symbol_find(name));
+    DEBUG_PRINT("isSymbolFound: %d\n", symbol_find(name));
     if(symbol_find(name) != -1){
         printf("Error: Variable decalred with same name\n");
         exit(1);
@@ -83,6 +83,15 @@ static void parse_if_statement(Parser *parser){
     }
 
 }
+
+static void parse_echo(Parser *parser){
+    //VarType var_type = (type == TOKEN_BOOL) ? TYPE_BOOL : TYPE_INT;
+    parser_expect(parser, TOKEN_ECHO);
+    int value = parse_expression(parser);
+    printf("%d", value);
+    parser_expect(parser, TOKEN_SEMICOLON);
+}
+
 static void parse_var_decl(Parser *parser, TokenType type){
     VarType var_type = (type == TOKEN_BOOL) ? TYPE_BOOL : TYPE_INT;
     parser_expect(parser, type);
@@ -116,13 +125,16 @@ void parse_statement(Parser* parser){
             break;
         case TOKEN_IDENTIFIER:
             parse_assignment_statement(parser);
-            printf("Parsed Assignment statemnt\n");
+            DEBUG_PRINT("Parsed Assignment statemnt\n");
             break;
         case TOKEN_OPEN_BRACES:
             parse_block(parser);
             break;
         case TOKEN_IF:
             parse_if_statement(parser);
+            break;
+        case TOKEN_ECHO:
+            parse_echo(parser);
             break;
         default:
             printf("Parse Error: Unexpected token %d\n", parser->current_token.type);
@@ -152,10 +164,10 @@ void parse_program(Parser *parser){
     while (parser->current_token.type != TOKEN_EOF) {
         parse_statement(parser);
     }
-    
     for(int i = 0; i<symbol_count;i++){
         DEBUG_PRINT("%s = %d\n", symbols[i].name, symbols[i].value);
     }
+    printf("\n");
     
     //parser_expect(parser, TOKEN_EOF);
 }

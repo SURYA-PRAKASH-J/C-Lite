@@ -14,6 +14,7 @@ static TokenType keyword_mapping(const char *ident){
 	if(strcmp(ident, "return") == 0) return TOKEN_RETURN;
 	if(strcmp(ident, "true") == 0) return TOKEN_TRUE;
 	if(strcmp(ident, "false") == 0) return TOKEN_FALSE;
+	if(strcmp(ident, "echo") == 0) return TOKEN_ECHO;
 
 	return TOKEN_IDENTIFIER;
 }
@@ -43,7 +44,7 @@ Token lexer_next_token(Lexer *lexer){
 		}
 		token.type = TOKEN_INTEGER;
 		token.value.int_value = value;
-		printf("INTEGER(%d)\n", token.value.int_value);
+		DEBUG_PRINT("INTEGER(%d)\n", token.value.int_value);
 		return token;
 	}
 
@@ -58,9 +59,9 @@ Token lexer_next_token(Lexer *lexer){
 		token.value.ident[len] = '\0';
 		token.type = keyword_mapping(token.value.ident);
 		if(token.type == TOKEN_IDENTIFIER){
-			printf("IDENT(%s)\n", token.value.ident);
+			DEBUG_PRINT("IDENT(%s)\n", token.value.ident);
 		}else{
-			printf("KEYWORD(%s)\n", token.value.ident);
+			DEBUG_PRINT("KEYWORD(%s)\n", token.value.ident);
 		}
 		return token;
 	}
