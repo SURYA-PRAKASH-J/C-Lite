@@ -102,7 +102,8 @@ Run:
 
 ## Design Philosophy
 
-Just do it if you can ✌️
+- Flexiblity
+- structured
 
 ## Roadmap
 
@@ -124,6 +125,11 @@ Detailed language specification and design notes can be found in the docs/ direc
 
 Contributions, issues, and feature requests are welcome!
 Feel free to fork the repo and submit a pull request.
+
+### Why This Project
+
+Because I thought how hard could it be
+*Pretty hard actually*
 
 ### License
 
