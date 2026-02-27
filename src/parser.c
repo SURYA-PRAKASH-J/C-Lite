@@ -89,6 +89,10 @@ static void parse_echo(Parser *parser){
     parser_expect(parser, TOKEN_ECHO);
     int value = parse_expression(parser);
     printf("%d", value);
+    if(parser->current_token.type == TOKEN_ENDL){
+        printf("\n");
+        parser_expect(parser, TOKEN_ENDL);
+    }
     parser_expect(parser, TOKEN_SEMICOLON);
 }
 

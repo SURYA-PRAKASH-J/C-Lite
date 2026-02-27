@@ -51,7 +51,8 @@ typedef enum{
 	TOKEN_BOOL,
 	TOKEN_OPEN_BRACES,
 	TOKEN_CLOSE_BRACES,
-	TOKEN_ECHO
+	TOKEN_ECHO,
+	TOKEN_ENDL
 } TokenType;
 
 typedef struct{

@@ -15,7 +15,7 @@ if_statement   → "if" expression block
 
 block          → "{" statement* "}"
 
-echo_statement → "echo" expression ";"
+echo_statement → "echo" expression (endl) ";"
 
 expression     → equality
 

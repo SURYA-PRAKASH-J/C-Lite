@@ -15,6 +15,7 @@ static TokenType keyword_mapping(const char *ident){
 	if(strcmp(ident, "true") == 0) return TOKEN_TRUE;
 	if(strcmp(ident, "false") == 0) return TOKEN_FALSE;
 	if(strcmp(ident, "echo") == 0) return TOKEN_ECHO;
+	if(strcmp(ident, "endl") == 0) return TOKEN_ENDL;
 
 	return TOKEN_IDENTIFIER;
 }
