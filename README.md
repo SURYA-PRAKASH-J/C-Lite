@@ -7,7 +7,9 @@ The main reason I created such is to explore how actual programming language wor
 C-Lite is intentionally small, explicit, and educational.
 
 ## Language Overview
-### Example:
+
+### Example
+
 ```C-Lite
 int a = 10;
 int b = (a * 2) + 5;
@@ -17,9 +19,10 @@ if (b > 20) {
 }
 ```
 
-## C-Lite currently supports:
+## C-Lite currently supports
 
-### Core Features:
+### Core Features
+
 - Integer variables
 - Variable declaration and assignment
 - Arithmetic expressions (+ - * /)
@@ -27,12 +30,14 @@ if (b > 20) {
 - Single-line comments (//)
 
 ### Comparison & Boolean Logic
+
 - > < >= <= == !=
 - Boolean values represented as:
-    - 0 → false
-    - 1 → true
+  - 0 → false
+  - 1 → true
 
 ### Control Flow
+
 - Basic if statements
 - Built-in Statement
 - echo for printing values
@@ -40,42 +45,57 @@ if (b > 20) {
 ## Implementation Details
 
 C-Lite is built using:
-+ Hand-written lexer (no generator tools)
-+ Recursive-descent parser
-+ Direct execution during parsing (current architecture)
+
+- Hand-written lexer (no generator tools)
+- Recursive-descent parser
+- Direct execution during parsing (current architecture)
 
 No code generation tools. No hidden abstractions.
 Every token and rule is implemented explicitly.
 
 ## Project Structure
+
 ```Tree
 C-Lite/
-├── lexer.c
-├── lexer.h
-├── parser.c
-├── parser.h
-├── expr.c
-├── main.c
+├── LICENSE
 ├── Makefile
 ├── README.md
+├── docs
+├── examples
+├── out.o
+├── src
+│   ├── expr.c
+│   ├── expr.h
+│   ├── lexer.c
+│   ├── lexer.h
+│   ├── main.c
+│   ├── parser.c
+│   └── parser.h
+└── text.cl
 ```
+
 ## Building
 
 Using gcc:
+
 ```bash
 make
 ```
+
 Or manually:
+
 ```bash
 gcc -Wall -Wextra -o out main.c lexer.c parser.c expr.c
 ```
 
 Run:
+
 ```bash
 ./out test.cl
 ```
 
-### Debug mode:
+### Debug mode
+
 ```bash
 ./out test.cl --debug
 ```
@@ -84,13 +104,14 @@ Run:
 
 Just do it if you can ✌️
 
-# Roadmap
+## Roadmap
 
 Planned improvements:
-+ While loops
-+ Explicit AST representation
-+ Separation of parsing and execution
-+ Possible IR or bytecode stage
+
+- While loops
+- Explicit AST representation
+- Separation of parsing and execution
+- Possible IR or bytecode stage
 
 ### Documentation
 
@@ -98,6 +119,7 @@ Detailed language specification and design notes can be found in the docs/ direc
 **Note:** Docs under development 
 
 ### Contributions
+
 - Surya Prakash J [obviously me]
 
 Contributions, issues, and feature requests are welcome! 
