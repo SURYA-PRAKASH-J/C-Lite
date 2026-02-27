@@ -9,6 +9,7 @@ non-zero → true
 Expressions are evaluated using operator precedence rules implemented in recursive-descent functions.
 
 Control flow:
+
 - if statements evaluate expression first
 - if result != 0, block executes
 - otherwise skipped

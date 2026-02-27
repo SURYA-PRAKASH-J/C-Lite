@@ -128,8 +128,7 @@ Feel free to fork the repo and submit a pull request.
 
 ### Why This Project
 
-Because I thought how hard could it be
-*Pretty hard actually*
+Because I thought how hard could it be (*Pretty hard actually*)
 
 ### License
 
