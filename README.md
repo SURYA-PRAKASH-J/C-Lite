@@ -2,7 +2,7 @@
 
 **C-Lite** is a minimal, C-inspired interpreted programming language written entirely from scratch in C.
 
-The main reason I created such is to explore how actual programming language works behind teh scenes. Also for my own satisfaction and fun.
+The main reason I created such is to explore how actual programming language works behind the scenes. Also for my own satisfaction and fun.
 
 C-Lite is intentionally small, explicit, and educational.
 
