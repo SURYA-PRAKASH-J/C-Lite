@@ -85,7 +85,7 @@ make
 Or manually:
 
 ```bash
-gcc -Wall -Wextra -o out main.c lexer.c parser.c expr.c
+gcc -Wall -Wextra -o out src/*.c
 ```
 
 Run:
