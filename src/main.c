@@ -6,7 +6,7 @@
 
 /*
 Hmm, cool.
-VERSION = 1.0.?
+VERSION = 0.1.?
 I didn't keep track initaially, my bad
 
 

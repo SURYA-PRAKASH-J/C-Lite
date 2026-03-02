@@ -3,49 +3,57 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "AST.h"
 
-static int parse_term(Parser *parser);
-static int parse_factor(Parser *parser);
+static ASTNode* parse_term(Parser *parser);
+static ASTNode* parse_factor(Parser *parser);
 
-static int parse_comparision(Parser *parser);
+static ASTNode* parse_comparision(Parser *parser);
 
-int parse_factor(Parser *parser){
-    int value;
+ASTNode* parse_factor(Parser *parser){
+    //int value;
     DEBUG_PRINT("DEBUG: parse_factor sees : %d\n", parser->current_token.type);
     if(parser->current_token.type == TOKEN_OPEN_PAREN){
         parser_expect(parser, TOKEN_OPEN_PAREN);
-        value = parse_expression(parser);
+        ASTNode* expr = parse_expression(parser);
         parser_expect(parser, TOKEN_CLOSE_PAREN);
-        return value;
+        return expr;
     }
     if(parser->current_token.type == TOKEN_MINUS){
         parser_expect(parser, TOKEN_MINUS);
-        return -parse_factor(parser);
-
+        ASTNode* operand = parse_factor(parser);
+        return create_unary(TOKEN_MINUS, operand);
     }
     if(parser->current_token.type == TOKEN_INTEGER){
-        value = parser->current_token.value.int_value;
+        int value = parser->current_token.value.int_value;
         parser_expect(parser, TOKEN_INTEGER);
-        return value;
+        return create_literal(value);
     }
 
     if(parser->current_token.type == TOKEN_IDENTIFIER){
         char name[64];
         strcpy(name, parser->current_token.value.ident);
         parser_expect(parser, TOKEN_IDENTIFIER);
-        return symbol_get(name);
+        return create_variable(name);
     }
     DEBUG_PRINT("Error: Unexpected term::%d\n", parser->current_token.type);
     exit(1);
 }
 
-int parse_term(Parser *parser){
-    int value = parse_factor(parser);
+ASTNode* parse_term(Parser *parser){
+    //int value = parse_factor(parser);
+
+    ASTNode* left = parse_factor(parser);
 
     while(parser->current_token.type == TOKEN_MULTPLY || parser->current_token.type == TOKEN_DIVIDE){
         TokenType op = parser->current_token.type;
         parser_expect(parser, op);
-        int rhs = parse_factor(parser);
+        
+
+        ASTNode* rigth = parse_factor(parser);
+
+        left = create_binary(left, op, rigth);
+        /*int rhs = parse_factor(parser);
         if(op == TOKEN_MULTPLY){
             value *= rhs;
         }else{
@@ -55,15 +63,23 @@ int parse_term(Parser *parser){
             }
             value /= rhs;
         }
+        */
     }
-    return value;
+    return left;
 }
 
-static int parse_addition(Parser *parser){
-    int value = parse_term(parser);
+static ASTNode* parse_addition(Parser *parser){
+    //int value = parse_term(parser);
+    ASTNode* left = parse_term(parser);
+
     while (parser->current_token.type == TOKEN_PLUS || parser->current_token.type == TOKEN_MINUS){
         TokenType op = parser->current_token.type;
         parser_expect(parser, op);
+        
+        ASTNode* rigth = parse_term(parser);
+        left = create_binary(left, op, rigth);
+
+        /*
         int rhs = parse_term(parser);
         if(op == TOKEN_PLUS)
         {
@@ -72,17 +88,20 @@ static int parse_addition(Parser *parser){
         else{
             value -= rhs;
         }
+        */
     }
-    return value;
+    return left;
 
 }
 
-int parse_expression(Parser *parser){
+ASTNode* parse_expression(Parser *parser){
     return  parse_comparision(parser);
 }
 
-static int parse_comparision(Parser *parser){
-    int left = parse_addition(parser);
+static ASTNode* parse_comparision(Parser *parser){
+    //int left = parse_addition(parser);
+    ASTNode* left = parse_addition(parser);
+
     while (
         parser->current_token.type == TOKEN_EQUALS ||
         parser->current_token.type == TOKEN_NOTEQ ||
@@ -93,8 +112,11 @@ static int parse_comparision(Parser *parser){
     ){
         TokenType op = parser->current_token.type;
         parser_expect(parser, op);
-        int right = parse_addition(parser);
+        //int right = parse_addition(parser);
 
+        ASTNode* right = parse_addition(parser);
+        left = create_binary(left, op, right);
+        /*
         switch (op)
         {
         case TOKEN_EQUALS: left = (left == right); break;
@@ -105,6 +127,7 @@ static int parse_comparision(Parser *parser){
         case TOKEN_GREAT_THAN_OR_EQ: left = (left >= right); break; 
         default: break;
         }
+        */
     }
     return left;
 }

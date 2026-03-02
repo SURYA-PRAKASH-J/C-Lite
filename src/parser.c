@@ -3,6 +3,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include "expr.h"
+#include "AST.h"
+
 static Symbol symbols[128];
 static int symbol_count = 0;
 
@@ -84,11 +86,11 @@ static void parse_if_statement(Parser *parser){
 
 }
 
-static void parse_echo(Parser *parser){
+static ASTNode* parse_echo(Parser *parser){
     //VarType var_type = (type == TOKEN_BOOL) ? TYPE_BOOL : TYPE_INT;
     parser_expect(parser, TOKEN_ECHO);
-    int value = parse_expression(parser);
-    printf("%d", value);
+    ASTNode* expr = parse_expression(parser)l
+    ASTNode* node = create_echo(value);
     if(parser->current_token.type == TOKEN_ENDL){
         printf("\n");
         parser_expect(parser, TOKEN_ENDL);
