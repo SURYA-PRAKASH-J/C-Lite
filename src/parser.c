@@ -89,7 +89,8 @@ static void parse_if_statement(Parser *parser){
 static ASTNode* parse_echo(Parser *parser){
     //VarType var_type = (type == TOKEN_BOOL) ? TYPE_BOOL : TYPE_INT;
     parser_expect(parser, TOKEN_ECHO);
-    ASTNode* expr = parse_expression(parser)l
+    ASTNode* expr = parse_expression(parser);
+    int value = parse_expression(parser);
     ASTNode* node = create_echo(value);
     if(parser->current_token.type == TOKEN_ENDL){
         printf("\n");
@@ -105,9 +106,11 @@ static void parse_var_decl(Parser *parser, TokenType type){
     strcpy(name, parser->current_token.value.ident);
     parser_expect(parser, TOKEN_IDENTIFIER);
     parser_expect(parser, TOKEN_ASSIGN);
-    int value = parse_expression(parser);
+    //int value = parse_expression(parser);
+    ASTNode* value = parse_expression(parser);
     parser_expect(parser, TOKEN_SEMICOLON);
-    symbol_add(name, value, var_type);
+    //symbol_add(name, value, var_type);
+    return create_var_decl(name, value, var_type);
 }
 
 static void parse_assignment_statement(Parser *parser){
