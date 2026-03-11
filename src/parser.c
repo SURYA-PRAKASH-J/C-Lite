@@ -186,7 +186,21 @@
         parser_advance(parser);
     }
 
-    void parse_program(Parser *parser){
+    ASTNode* parse_program(Parser *parser){
+        BlockNode* block = (BlockNode*) create_block();
+        while(parser->current_token.type != TOKEN_EOF){
+            ASTNode* stmt = parse_statement(parser);
+            block_add_statement(block, stmt);
+        }
+
+        ProgramNode* program = malloc(sizeof(ProgramNode));
+        program->base.type = NODE_PROGRAM;
+        program->body = block;
+
+        return (ASTNode*) program;
+        
+        //OLD EXECTUTION STRAIGHT FROM PARSER
+        /*
         while (parser->current_token.type != TOKEN_EOF) {
             parse_statement(parser);
         }
@@ -194,8 +208,8 @@
             DEBUG_PRINT("%s = %d\n", symbols[i].name, symbols[i].value);
         }
         printf("\n");
+        */
         
         //parser_expect(parser, TOKEN_EOF);
     }
-
 
