@@ -24,7 +24,7 @@ ASTNode* create_binary(ASTNode* left, TokenType oper, ASTNode* right){
     return (ASTNode*) node;
 }
 
-ASTNode* create_unary(TokenType oper, TokenType operand){
+ASTNode* create_unary(TokenType oper, ASTNode* operand){
     UnaryNode* node = malloc(sizeof(UnaryNode));
     node->base.type = NODE_UNARY;
     node->right = operand;
@@ -49,7 +49,7 @@ ASTNode* create_variable(const char* name){
     return (ASTNode*) node;
 }
 
-ASTNode* create_var_decl(const char* name, int value, VarType var_type){
+ASTNode* create_var_decl(const char* name, ASTNode* value, VarType var_type){
     VarDeclNode* node = malloc(sizeof(VarDeclNode));
     node->base.type = NODE_VAR_DECL;
     node->name = malloc(strlen(name) + 1);
@@ -59,7 +59,13 @@ ASTNode* create_var_decl(const char* name, int value, VarType var_type){
 
     return (ASTNode*) node;
 }
-void block_add_statement(BlockNode* block, ASTNode* stmt) {
+
+ASTNode* create_assignment(const char* name, ASTNode* value){
+
+}
+
+void block_add_statement(BlockNode *block, ASTNode *stmt)
+{
     if (block->count >= block->capacity) {
         block->capacity *= 2;
         block->statements = realloc(block->statements,

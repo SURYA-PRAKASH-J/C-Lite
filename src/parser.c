@@ -47,7 +47,7 @@ void symbol_set(const char *name, int value){
     }
     symbols[i].value = value;
 }
-static void parse_block(Parser* parser){
+static ASTNode* parse_block(Parser* parser){
     parser_expect(parser, TOKEN_OPEN_BRACES);
 
     while (parser->current_token.type != TOKEN_CLOSE_BRACES){
@@ -58,7 +58,7 @@ static void parse_block(Parser* parser){
     }
     parser_expect(parser, TOKEN_CLOSE_BRACES);
 }
-static void parse_if_statement(Parser *parser){
+static ASTNode* parse_if_statement(Parser *parser){
     parser_expect(parser, TOKEN_IF);
     int condition;
     if(parser->current_token.type == TOKEN_OPEN_BRACES){
@@ -99,7 +99,7 @@ static ASTNode* parse_echo(Parser *parser){
     parser_expect(parser, TOKEN_SEMICOLON);
 }
 
-static void parse_var_decl(Parser *parser, TokenType type){
+static ASTNode* parse_var_decl(Parser *parser, TokenType type){
     VarType var_type = (type == TOKEN_BOOL) ? TYPE_BOOL : TYPE_INT;
     parser_expect(parser, type);
     char name[64];
@@ -113,38 +113,39 @@ static void parse_var_decl(Parser *parser, TokenType type){
     return create_var_decl(name, value, var_type);
 }
 
-static void parse_assignment_statement(Parser *parser){
+static ASTNode* parse_assignment_statement(Parser *parser){
     char name[64];
     strcpy(name, parser->current_token.value.ident);
     parser_expect(parser, TOKEN_IDENTIFIER);
     parser_expect(parser, TOKEN_ASSIGN);
-    int value = parse_expression(parser);
+    ASTNode* value = parse_expression(parser);
+    //int value = parse_expression(parser);
     parser_expect(parser, TOKEN_SEMICOLON);
-    symbol_set(name, value);
+    //symbol_set(name, value);
+    return create_assignment(name, value);
 }
 
 
-void parse_statement(Parser* parser){
+ASTNode* parse_statement(Parser* parser){
     switch (parser->current_token.type) {
         case TOKEN_INT:
-            parse_var_decl(parser, TOKEN_INT);
-            break;
+            return parse_var_decl(parser, TOKEN_INT);
         case TOKEN_BOOL:
-            parse_var_decl(parser, TOKEN_BOOL);
-            break;
+            return parse_var_decl(parser, TOKEN_BOOL);
+            //break;
         case TOKEN_IDENTIFIER:
-            parse_assignment_statement(parser);
             DEBUG_PRINT("Parsed Assignment statemnt\n");
-            break;
+            return parse_assignment_statement(parser);
+            //break;
         case TOKEN_OPEN_BRACES:
-            parse_block(parser);
-            break;
+            return parse_block(parser);
+            //break;
         case TOKEN_IF:
-            parse_if_statement(parser);
-            break;
+            return parse_if_statement(parser);
+            //break;
         case TOKEN_ECHO:
-            parse_echo(parser);
-            break;
+            return parse_echo(parser);
+            //break;
         default:
             printf("Parse Error: Unexpected token %d\n", parser->current_token.type);
             exit(1);

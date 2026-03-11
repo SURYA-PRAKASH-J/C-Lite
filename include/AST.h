@@ -93,10 +93,11 @@ ASTNode* create_binary(ASTNode* left, TokenType op, ASTNode* right);
 ASTNode* create_echo(ASTNode* expr);
 ASTNode* create_if(ASTNode* condition, ASTNode* body);
 ASTNode* create_block();
-ASTNode* create_unary(TokenType oper, TokenType operand);
+ASTNode* create_unary(TokenType oper, ASTNode* operand);
+ASTNode* create_assignment(const char* name, ASTNode* value);
 ASTNode* create_variable(const char* name);
 ASTNode* create_var_decl(const char* name, int value, VarType var_type);
-//void block_add_statement(ASTNode* block, ASTNode* stmt);
+void block_add_statement(BlockNode* block, ASTNode* stmt);
 
 
 

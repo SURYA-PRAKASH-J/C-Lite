@@ -114,26 +114,26 @@ Planned improvements:
 - Separation of parsing and execution
 - Possible IR or bytecode stage
 
-### Documentation
+## Documentation
 
 Detailed language specification and design notes can be found in the docs/ directory.
 **Note:** Docs under development
 
-### Contributions
+## Contributions
 
 - Surya Prakash J [obviously me]
 
 Contributions, issues, and feature requests are welcome!
 Feel free to fork the repo and submit a pull request.
 
-### Why This Project
+## Why This Project
 
 Because I thought how hard could it be (*Pretty hard actually*)
 
-### License
+## License
 
 MIT
 
-### Author
+## Author
 
 Surya Prakash J
