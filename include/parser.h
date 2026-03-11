@@ -14,7 +14,7 @@ void parser_expect(Parser *parser, TokenType type);
 
 
 void parse_statement(Parser* parser);
-void parse_program(Parser* parser);
+ASTNode* parse_program(Parser* parser);
 
 
 typedef enum {

@@ -83,9 +83,7 @@ typedef struct
 
 typedef struct {
     ASTNode base;
-    ASTNode** statements;
-    int count;
-    int capacity;   
+    BlockNode* body;
 } ProgramNode;
 
 ASTNode* create_literal(int value);
@@ -96,10 +94,5 @@ ASTNode* create_block();
 ASTNode* create_unary(TokenType oper, ASTNode* operand);
 ASTNode* create_assignment(const char* name, ASTNode* value);
 ASTNode* create_variable(const char* name);
-ASTNode* create_var_decl(const char* name, int value, VarType var_type);
+ASTNode* create_var_decl(const char* name, ASTNode* value, VarType var_type);
 void block_add_statement(BlockNode* block, ASTNode* stmt);
-
-
-
-
-

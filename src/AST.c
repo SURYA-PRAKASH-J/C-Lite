@@ -1,5 +1,6 @@
 #include "AST.h"
 #include <stdlib.h>
+#include <string.h>
 
 ASTNode* create_literal(int val){
     LiteralNode* node = malloc(sizeof(LiteralNode));
@@ -61,7 +62,22 @@ ASTNode* create_var_decl(const char* name, ASTNode* value, VarType var_type){
 }
 
 ASTNode* create_assignment(const char* name, ASTNode* value){
+    AssignNode* node =  malloc(sizeof(AssignNode));
 
+    node->base.type = NODE_ASSIGN;
+
+    node->name = malloc(strlen(name) + 1);
+    strcpy(node->name, name);
+
+    node->value = value;
+    return (ASTNode*) node;
+}
+
+ASTNode* create_program(BlockNode* body){
+    ProgramNode* node = malloc(sizeof(ProgramNode));
+    node->base.type=NODE_PROGRAM;
+    node->body = body;
+    return (ASTNode*) node;
 }
 
 void block_add_statement(BlockNode *block, ASTNode *stmt)
