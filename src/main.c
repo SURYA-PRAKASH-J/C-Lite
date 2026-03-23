@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include "lexer.h"
 #include "parser.h"
+#include "interpreter.h"
+#include "AST.h"
 
 /*
 Hmm, cool.
@@ -34,7 +36,10 @@ int main(int argc, char *argv[]){
 	*/
 	Parser parser;
 	parser_init(&parser, &lexer);
-	parse_program(&parser);
+	//parse_program(&parser);
+	ASTNode* program = parse_program(&parser);
+	exec(program);
+	
 	if(fptr == NULL){
 		printf("Error: \"%s\" file does not exist\n", argv[1]);
 		return 1;

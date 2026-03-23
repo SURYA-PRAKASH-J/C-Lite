@@ -1,12 +1,13 @@
 #ifndef EXPR_H
 #define EXPR_H
 
+#include "AST.h"
 #include "parser.h"
 
 typedef int (*BuiltinFn)(int arg);
 
 // Entry point for expression parsing
-int parse_expression(Parser *parser);
+ASTNode* parse_expression(Parser *parser);
 
 
 #endif

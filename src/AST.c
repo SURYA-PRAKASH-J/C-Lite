@@ -9,10 +9,11 @@ ASTNode* create_literal(int val){
     return (ASTNode*) node;
 }
 
-ASTNode* create_echo(ASTNode* expr){
+ASTNode* create_echo(ASTNode* expr, int newLineCount){
     EchoNode* node = malloc(sizeof(EchoNode));
     node->base.type = NODE_ECHO;
     node->expression = expr;
+    node->newLineCount = newLineCount;
     return (ASTNode*) node;
 }
 
@@ -79,7 +80,13 @@ ASTNode* create_program(BlockNode* body){
     node->body = body;
     return (ASTNode*) node;
 }
-
+ASTNode* create_if(ASTNode* condition, ASTNode* body) {
+    IfNode* node = malloc(sizeof(IfNode));
+    node->base.type = NODE_IF;
+    node->condition = condition;
+    node->body = body;
+    return (ASTNode*)node;
+}
 void block_add_statement(BlockNode *block, ASTNode *stmt)
 {
     if (block->count >= block->capacity) {

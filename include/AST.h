@@ -1,5 +1,12 @@
+#ifndef AST_H
+#define AST_H
+
 #include "lexer.h"
-#include "parser.h"
+
+typedef enum {
+    TYPE_INT,
+    TYPE_BOOL
+} VarType;
 
 typedef enum{
     NODE_PROGRAM,
@@ -64,6 +71,7 @@ typedef struct
 {
     ASTNode base;
     ASTNode* expression;
+    int newLineCount;
 }EchoNode;
 
 typedef struct 
@@ -88,7 +96,7 @@ typedef struct {
 
 ASTNode* create_literal(int value);
 ASTNode* create_binary(ASTNode* left, TokenType op, ASTNode* right);
-ASTNode* create_echo(ASTNode* expr);
+ASTNode* create_echo(ASTNode* expr, int newLineCount);
 ASTNode* create_if(ASTNode* condition, ASTNode* body);
 ASTNode* create_block();
 ASTNode* create_unary(TokenType oper, ASTNode* operand);
@@ -96,3 +104,6 @@ ASTNode* create_assignment(const char* name, ASTNode* value);
 ASTNode* create_variable(const char* name);
 ASTNode* create_var_decl(const char* name, ASTNode* value, VarType var_type);
 void block_add_statement(BlockNode* block, ASTNode* stmt);
+
+
+#endif

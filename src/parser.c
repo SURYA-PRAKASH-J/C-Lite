@@ -5,48 +5,7 @@
     #include "expr.h"
     #include "AST.h"
 
-    static Symbol symbols[128];
-    static int symbol_count = 0;
 
-    int symbol_find(const char *name){
-            for(int i = 0; i < symbol_count; i++){
-                //printf ("strcmp(symbols[i].name, name) -> %d",strcmp(symbols[i].name, name));
-                if(strcmp(symbols[i].name, name) == 0){
-                    return i;
-                }
-            }
-            return -1;
-    }
-    void symbol_add(const char *name, int value, VarType type){
-        DEBUG_PRINT("isSymbolFound: %d\n", symbol_find(name));
-        if(symbol_find(name) != -1){
-            printf("Error: Variable decalred with same name\n");
-            exit(1);
-        }
-        strcpy(symbols[symbol_count].name, name);
-        symbols[symbol_count].value = value;
-        symbols[symbol_count].type = type;
-        symbol_count++;
-        DEBUG_PRINT("SYMBOL ADDED\n");
-    }
-
-    int symbol_get(const char *name){
-        int i = symbol_find(name);
-        if(i==-1){
-            printf("Error: undefined variable %s\n", name);
-            exit(1);
-        }
-        return symbols[i].value;
-    }
-
-    void symbol_set(const char *name, int value){
-        int i = symbol_find(name);
-        if(i==-1){
-            printf("Error: undefined variable %s\n", name);
-            exit(1);
-        }
-        symbols[i].value = value;
-    }
     static ASTNode* parse_block(Parser* parser){
         parser_expect(parser, TOKEN_OPEN_BRACES);
         BlockNode* block = (BlockNode*) create_block();
@@ -62,6 +21,7 @@
             }
         }
         parser_expect(parser, TOKEN_CLOSE_BRACES);
+        return (ASTNode*) block;
     }
     static ASTNode* parse_if_statement(Parser *parser){
         parser_expect(parser, TOKEN_IF);
@@ -103,6 +63,7 @@
         //VarType var_type = (type == TOKEN_BOOL) ? TYPE_BOOL : TYPE_INT;
         parser_expect(parser, TOKEN_ECHO);
         ASTNode* expr = parse_expression(parser);
+        int newLineCount = 1;
         /*
         int value = parse_expression(parser);
         ASTNode* node = create_echo(value);
@@ -111,8 +72,13 @@
             parser_expect(parser, TOKEN_ENDL);
         }
         */
+       while(parser->current_token.type == TOKEN_ENDL){
+        newLineCount++;
+        parser_advance(parser);
+       }
+       
         parser_expect(parser, TOKEN_SEMICOLON);
-        return create_echo(expr);
+        return create_echo(expr, newLineCount);
     }
 
     static ASTNode* parse_var_decl(Parser *parser, TokenType type){
@@ -186,12 +152,12 @@
         parser_advance(parser);
     }
 
-    ASTNode* parse_program(Parser *parser){
-        BlockNode* block = (BlockNode*) create_block();
-        while(parser->current_token.type != TOKEN_EOF){
-            ASTNode* stmt = parse_statement(parser);
-            block_add_statement(block, stmt);
-        }
+ASTNode* parse_program(Parser *parser){
+    BlockNode* block = (BlockNode*) create_block();
+    while(parser->current_token.type != TOKEN_EOF){
+        ASTNode* stmt = parse_statement(parser);
+        block_add_statement(block, stmt);
+    }
 
         ProgramNode* program = malloc(sizeof(ProgramNode));
         program->base.type = NODE_PROGRAM;
