@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdlib.h>
 
 int LEXER_DEBUG = 0;
 
@@ -121,6 +122,26 @@ Token lexer_next_token(Lexer *lexer){
 		}
 		token.type = TOKEN_NOT;
 		return token;
+	}
+	if(lexer->current_char == '&'){
+		lexer_advance(lexer);
+		if(lexer->current_char == '&'){
+			lexer_advance(lexer);
+			token.type = TOKEN_AND;
+			return token;
+		}
+		printf("Invalid Token '&'\n");
+		exit(1);
+	}
+	if(lexer->current_char == '|'){
+		lexer_advance(lexer);
+		if(lexer->current_char == '|'){
+			lexer_advance(lexer);
+			token.type = TOKEN_OR;
+			return token;
+		}
+		printf("Invalid Token '|'\n");
+		exit(1);
 	}
 	if(lexer->current_char == '<'){
 		lexer_advance(lexer);

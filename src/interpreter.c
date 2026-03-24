@@ -76,6 +76,9 @@ int eval(ASTNode* node){
             case TOKEN_GREAT_THAN_OR_EQ: return left <= right;
             case TOKEN_EQUALS: return left == right;
             case TOKEN_NOTEQ: return left!=right;
+            
+            case TOKEN_AND: return (left && right);
+            case TOKEN_OR: return (left || right);
 
             default:
                 printf("Invalid binary operator: %d\n", b->oper);
@@ -86,7 +89,15 @@ int eval(ASTNode* node){
     {
         UnaryNode* u = (UnaryNode*)node;
         int val = eval(u->right);
-        if(u->oper == TOKEN_MINUS){ return -val;}
+        //if(u->oper == TOKEN_MINUS){ return -val;}
+        switch (u->oper)
+        {
+        case TOKEN_MINUS: return -val;
+        case TOKEN_NOT: return !val;
+        default:
+            printf("Invalid Unary Token: %d", &(u->oper));
+            exit(1);
+        }
         return val;
     }
     

@@ -36,6 +36,11 @@ ASTNode* parse_factor(Parser *parser){
         parser_expect(parser, TOKEN_IDENTIFIER);
         return create_variable(name);
     }
+    if (parser->current_token.type == TOKEN_NOT) {
+        parser_expect(parser, TOKEN_NOT);
+        ASTNode* operand = parse_factor(parser);
+        return create_unary(TOKEN_NOT, operand);
+    }
     DEBUG_PRINT("Error: Unexpected term::%d\n", parser->current_token.type);
     exit(1);
 }
@@ -67,7 +72,32 @@ ASTNode* parse_term(Parser *parser){
     }
     return left;
 }
+static ASTNode* parse_and(Parser* parser) {
+    ASTNode* left = parse_comparision(parser);
 
+    while (parser->current_token.type == TOKEN_AND) {
+        TokenType op = parser->current_token.type;
+        parser_expect(parser, op);
+
+        ASTNode* right = parse_comparision(parser);
+        left = create_binary(left, op, right);
+    }
+
+    return left;
+}
+static ASTNode* parse_or(Parser* parser) {
+    ASTNode* left = parse_and(parser);
+
+    while (parser->current_token.type == TOKEN_OR) {
+        TokenType op = parser->current_token.type;
+        parser_expect(parser, op);
+
+        ASTNode* right = parse_and(parser);
+        left = create_binary(left, op, right);
+    }
+
+    return left;
+}
 static ASTNode* parse_addition(Parser *parser){
     //int value = parse_term(parser);
     ASTNode* left = parse_term(parser);
@@ -95,7 +125,7 @@ static ASTNode* parse_addition(Parser *parser){
 }
 
 ASTNode* parse_expression(Parser *parser){
-    return  parse_comparision(parser);
+    return parse_or(parser);
 }
 
 static ASTNode* parse_comparision(Parser *parser){

@@ -59,6 +59,7 @@
 
     }
 
+
     static ASTNode* parse_echo(Parser *parser){
         //VarType var_type = (type == TOKEN_BOOL) ? TYPE_BOOL : TYPE_INT;
         parser_expect(parser, TOKEN_ECHO);
