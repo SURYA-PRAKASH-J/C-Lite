@@ -63,11 +63,20 @@ int eval(ASTNode* node){
         BinaryNode* b = (BinaryNode*)node;
         int left = eval(b->left);
         int right = eval(b->right);
+        //printf("LEFT: %d, RIGHT: %d\n", left, right);
         switch(b->oper){
             case TOKEN_PLUS: return left + right;
             case TOKEN_MINUS: return left - right;
             case TOKEN_MULTPLY: return left * right;
             case TOKEN_DIVIDE: {if(right != 0 ){ return left/right; }else{printf("Error: Cannot Divide by zero"); exit(1);}}
+
+            case TOKEN_LESS_THAN: return left < right;
+            case TOKEN_GREATER_THAN: return left > right;
+            case TOKEN_LESS_THAN_OR_EQ: return left <= right;
+            case TOKEN_GREAT_THAN_OR_EQ: return left <= right;
+            case TOKEN_EQUALS: return left == right;
+            case TOKEN_NOTEQ: return left!=right;
+
             default:
                 printf("Invalid binary operator: %d\n", b->oper);
                 exit(1);

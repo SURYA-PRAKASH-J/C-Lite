@@ -8,12 +8,12 @@
 
 /*
 Hmm, cool.
-VERSION = 0.1.?
+VERSION = 1.0
 I didn't keep track initaially, my bad
 
 
 Updating this everytime i get a segfaults from now on [added pretty late but i rememebered the count]
-SEGFAULTs = 3
+SEGFAULTs = 4
 */
 int main(int argc, char *argv[]){
 	if(argc < 2){
@@ -25,6 +25,11 @@ int main(int argc, char *argv[]){
 	}
 	//Token tok;
 	FILE* fptr = fopen(argv[1], "r");
+	
+	if(fptr == NULL){
+		printf("Error: \"%s\" file does not exist\n", argv[1]);
+		return 1;
+	}
 
 	Lexer lexer;
 	lexer_init(&lexer, fptr);
@@ -39,11 +44,6 @@ int main(int argc, char *argv[]){
 	//parse_program(&parser);
 	ASTNode* program = parse_program(&parser);
 	exec(program);
-	
-	if(fptr == NULL){
-		printf("Error: \"%s\" file does not exist\n", argv[1]);
-		return 1;
-	}
 	fclose(fptr);
 	return 0;
 

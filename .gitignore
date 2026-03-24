@@ -2,4 +2,6 @@ out
 out.o
 *.o
 clite.exe
+clite
+clite.o
 text.cl

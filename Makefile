@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Iinclude
 SRC = src/main.c src/lexer.c src/parser.c src/expr.c src/AST.c src/interpreter.c
-OUT = out
+OUT = clite
 
 all:
 	$(CC) $(CFLAGS) -o $(OUT) $(SRC)
