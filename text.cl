@@ -15,51 +15,14 @@ if a < b {
 if a > b {
     echo 0;
 }
+echo 100000000000000000000000000;
+int age = 17;
 
-echo 1 < 2 < 3;
-echo 5 == 5 == 1;
-echo 10 > 5 + 2 * 3;
-
-echo 1 + 2 * 3;
-echo (1 + 2) * 3;
-
-echo 10 > 5 + 2 * 3;
-echo (10 > 5) + 2 * 3;
-
-echo 1 < 2 && 2 < 3;
-echo 1 < (2 && 2) < 3;
-
-echo 1 + 2 * 3;
-echo (1 + 2) * 3;
-
-echo 10 > 5 + 2 * 3;
-echo (10 > 5) + 2 * 3;
-
-echo 1 < 2 && 2 < 3;
-echo 1 < (2 && 2) < 3;
-
-echo 1 < 2 < 3;
-echo 3 > 2 > 1;
-echo 5 == 5 == 1;
-echo 5 == 5 == 0;
-
-int a = 5;
-echo a;
-
-a = a + 10;
-echo a;
-
-int b = a * 2;
-echo b;
-
-a = b + a;
-echo a;
-
-int a = 10;
-
-if 1 {
-    int a = 20;
-    echo a;
+if age >= 18 {
+    echo 1;
+}else{
+    echo 0;
+    if(age==17){
+        echo 11;
+    }
 }
-
-echo a;

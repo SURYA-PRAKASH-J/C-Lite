@@ -25,12 +25,21 @@
     }
     static ASTNode* parse_if_statement(Parser *parser){
         parser_expect(parser, TOKEN_IF);
-
+        
         ASTNode* condition = parse_expression(parser);
 
         ASTNode* body = parse_block(parser);
-
-        return create_if(condition, body);
+        ASTNode* else_Branch = NULL;
+        if(parser->current_token.type == TOKEN_ELSE){
+            parser_expect(parser, TOKEN_ELSE);
+            if(parser->current_token.type == TOKEN_IF){
+                else_Branch = parse_if_statement(parser);
+            }else{
+                else_Branch = parse_block(parser);
+            }
+        }
+        
+        return create_if(condition, body, else_Branch);
         /*
         int condition;
         if(parser->current_token.type == TOKEN_OPEN_BRACES){
@@ -58,7 +67,6 @@
         */
 
     }
-
 
     static ASTNode* parse_echo(Parser *parser){
         //VarType var_type = (type == TOKEN_BOOL) ? TYPE_BOOL : TYPE_INT;

@@ -80,13 +80,15 @@ ASTNode* create_program(BlockNode* body){
     node->body = body;
     return (ASTNode*) node;
 }
-ASTNode* create_if(ASTNode* condition, ASTNode* body) {
+ASTNode* create_if(ASTNode* condition, ASTNode* body, ASTNode* elseBran) {
     IfNode* node = malloc(sizeof(IfNode));
     node->base.type = NODE_IF;
     node->condition = condition;
     node->body = body;
+    node->else_branch = elseBran;
     return (ASTNode*)node;
 }
+
 void block_add_statement(BlockNode *block, ASTNode *stmt)
 {
     if (block->count >= block->capacity) {

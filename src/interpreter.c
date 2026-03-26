@@ -169,6 +169,8 @@ void exec(ASTNode* node){
 
             if(condition){
                 exec(i->body);
+            }else if(i->else_branch != NULL){
+                exec(i->else_branch);
             }
             break;
         }
