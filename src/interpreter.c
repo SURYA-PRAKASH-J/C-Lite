@@ -73,7 +73,7 @@ int eval(ASTNode* node){
             case TOKEN_LESS_THAN: return left < right;
             case TOKEN_GREATER_THAN: return left > right;
             case TOKEN_LESS_THAN_OR_EQ: return left <= right;
-            case TOKEN_GREAT_THAN_OR_EQ: return left <= right;
+            case TOKEN_GREAT_THAN_OR_EQ: return left >= right;
             case TOKEN_EQUALS: return left == right;
             case TOKEN_NOTEQ: return left!=right;
             
