@@ -15,6 +15,7 @@ typedef enum{
     NODE_ECHO,
     NODE_IF,
     NODE_ELSE,
+    NODE_WHILE,
     NODE_BINARY,
     NODE_BLOCK,
     NODE_LITERAL,
@@ -83,6 +84,12 @@ typedef struct
     ASTNode* else_branch;
 }IfNode;
 
+typedef struct{
+    ASTNode base;
+    ASTNode* condition;
+    ASTNode* body;
+}WhileNode;
+
 typedef struct 
 {
     ASTNode base;
@@ -101,6 +108,7 @@ ASTNode* create_binary(ASTNode* left, TokenType op, ASTNode* right);
 ASTNode* create_echo(ASTNode* expr, int newLineCount);
 ASTNode* create_if(ASTNode* condition, ASTNode* body, ASTNode* elseBran);
 //ASTNode* create_else(ASTNode* block);
+ASTNode* create_while(ASTNode* condition, ASTNode* body);
 ASTNode* create_block();
 ASTNode* create_unary(TokenType oper, ASTNode* operand);
 ASTNode* create_assignment(const char* name, ASTNode* value);

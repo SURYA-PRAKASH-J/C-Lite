@@ -116,6 +116,13 @@
         return create_assignment(name, value);
     }
 
+    ASTNode* parse_while(Parser* parser){
+        parser_expect(parser, TOKEN_WHILE);
+        ASTNode* condition = parse_expression(parser);
+        ASTNode* body = parse_block(parser);
+        return create_while(condition, body);
+    }
+
 
     ASTNode* parse_statement(Parser* parser){
         switch (parser->current_token.type) {
@@ -137,6 +144,8 @@
             case TOKEN_ECHO:
                 return parse_echo(parser);
                 //break;
+            case TOKEN_WHILE:
+                return parse_while(parser);
             default:
                 printf("Parse Error: Unexpected token %d\n", parser->current_token.type);
                 exit(1);

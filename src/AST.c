@@ -89,6 +89,14 @@ ASTNode* create_if(ASTNode* condition, ASTNode* body, ASTNode* elseBran) {
     return (ASTNode*)node;
 }
 
+ASTNode* create_while(ASTNode* condition, ASTNode* body){
+    WhileNode* node = malloc(sizeof(WhileNode));
+    node->base.type = NODE_WHILE;
+    node->body = body;
+    node->condition = condition;
+    return (ASTNode*)node;
+}
+
 void block_add_statement(BlockNode *block, ASTNode *stmt)
 {
     if (block->count >= block->capacity) {

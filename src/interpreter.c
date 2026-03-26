@@ -189,6 +189,14 @@ void exec(ASTNode* node){
             break;
         }
 
+        case NODE_WHILE:
+        {
+            WhileNode* wh = (WhileNode*)node;
+            while(eval(wh->condition)){
+                exec(wh->body);
+            }
+            break;
+        }
         default:
             printf("Exec error\n");
             exit(1);
