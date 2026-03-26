@@ -6,9 +6,10 @@
 // ---SYMBOL-HANLER---
 static Symbol symbols[128];
 static int symbol_count = 0;
+static int current_depth = 0;
 
 int symbol_find(const char *name){
-        for(int i = 0; i < symbol_count; i++){
+        for(int i = symbol_count - 1; i >= 0; i--){
             //printf ("strcmp(symbols[i].name, name) -> %d",strcmp(symbols[i].name, name));
             if(strcmp(symbols[i].name, name) == 0){
                 return i;
@@ -18,13 +19,18 @@ int symbol_find(const char *name){
 }
 void symbol_add(const char *name, int value, VarType type){
     DEBUG_PRINT("isSymbolFound: %d\n", symbol_find(name));
-    if(symbol_find(name) != -1){
-        printf("Error: Variable decalred with same name\n");
-        exit(1);
+    for (int i = symbol_count - 1; i >=0; i--){
+        if (symbols[i].depth != current_depth) break;
+
+        if (strcmp(symbols[i].name, name) == 0){
+            printf("Error: Redeclared in same scope!\n");
+            exit(1);
+        }
     }
     strcpy(symbols[symbol_count].name, name);
     symbols[symbol_count].value = value;
     symbols[symbol_count].type = type;
+    symbols[symbol_count].depth = current_depth;
     symbol_count++;
     DEBUG_PRINT("SYMBOL ADDED\n");
 }
@@ -120,11 +126,19 @@ void exec(ASTNode* node){
 
         case NODE_BLOCK:
         {
+            current_depth++;
             BlockNode* b = (BlockNode*)node;
 
             for(int i = 0; i < b->count; i++){
                 exec(b->statements[i]);
             }
+            for (int i = symbol_count -1; i >= 0; i--){
+                if (symbols[i].depth == current_depth){
+                    symbols[i] = symbols[symbol_count-1];
+                    symbol_count--;
+                }
+            }
+            current_depth--;
             break;
         }
 

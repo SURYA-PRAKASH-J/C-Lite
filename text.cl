@@ -26,3 +26,12 @@ if age >= 18 {
         echo 11;
     }
 }
+echo 100000000;
+int y = 10;
+
+if 1 {
+    int y = 20;
+    echo y;
+}
+
+echo y;
