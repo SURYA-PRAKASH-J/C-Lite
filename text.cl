@@ -5,6 +5,7 @@ echo a;  //print statement
 a = a + 30 - (2 * 12); //Expression Handling
 echo a; 
 
+bool isBoolWorking = true;
 int b = 10 + a;
 echo b;
 

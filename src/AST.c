@@ -2,10 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-ASTNode* create_literal(int val){
+ASTNode* create_literal(int val, VarType type){
     LiteralNode* node = malloc(sizeof(LiteralNode));
     node->base.type = NODE_LITERAL;
     node->value = val;
+    node->type = type;
     return (ASTNode*) node;
 }
 

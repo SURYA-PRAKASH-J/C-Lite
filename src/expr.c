@@ -27,7 +27,7 @@ ASTNode* parse_factor(Parser *parser){
     if(parser->current_token.type == TOKEN_INTEGER){
         int value = parser->current_token.value.int_value;
         parser_expect(parser, TOKEN_INTEGER);
-        return create_literal(value);
+        return create_literal(value, TYPE_INT);
     }
 
     if(parser->current_token.type == TOKEN_IDENTIFIER){
@@ -40,6 +40,14 @@ ASTNode* parse_factor(Parser *parser){
         parser_expect(parser, TOKEN_NOT);
         ASTNode* operand = parse_factor(parser);
         return create_unary(TOKEN_NOT, operand);
+    }
+    if(parser->current_token.type == TOKEN_TRUE){
+        parser_expect(parser, TOKEN_TRUE);
+        return create_literal(1, TYPE_BOOL);
+    }
+    if(parser->current_token.type == TOKEN_FALSE){
+        parser_expect(parser, TOKEN_FALSE);
+        return create_literal(0, TYPE_BOOL);
     }
     DEBUG_PRINT("Error: Unexpected term::%d\n", parser->current_token.type);
     exit(1);

@@ -47,6 +47,7 @@ typedef struct
 {
     ASTNode base;
     int value;
+    VarType type;
 } LiteralNode;
 
 typedef struct{
@@ -103,7 +104,7 @@ typedef struct {
     BlockNode* body;
 } ProgramNode;
 
-ASTNode* create_literal(int value);
+ASTNode* create_literal(int value, VarType type);
 ASTNode* create_binary(ASTNode* left, TokenType op, ASTNode* right);
 ASTNode* create_echo(ASTNode* expr, int newLineCount);
 ASTNode* create_if(ASTNode* condition, ASTNode* body, ASTNode* elseBran);

@@ -3,6 +3,11 @@
 #include <string.h>
 #include <stdlib.h>
 
+static inline Value make_value(int val, VarType type) {
+    return (Value){.value = val, .type = type};
+}
+
+
 // ---SYMBOL-HANLER---
 static Symbol symbols[128];
 static int symbol_count = 0;
@@ -35,13 +40,13 @@ void symbol_add(const char *name, int value, VarType type){
     DEBUG_PRINT("SYMBOL ADDED\n");
 }
 
-int symbol_get(const char *name){
+Symbol symbol_get(const char *name){
     int i = symbol_find(name);
     if(i==-1){
         printf("Error: undefined variable %s\n", name);
         exit(1);
     }
-    return symbols[i].value;
+    return symbols[i];
 }
 
 void symbol_set(const char *name, int value){
@@ -54,37 +59,38 @@ void symbol_set(const char *name, int value){
 }
 
 //---SYMBOL-HANDLER-ENDS---
-int eval(ASTNode* node){
+Value eval(ASTNode* node){
     switch (node->type)
     {
     case NODE_LITERAL:
-        return ((LiteralNode*)node)->value;
+        return make_value(((LiteralNode*)node)->value,TYPE_INT);
     case NODE_VARIABLE:
     {
         VariableNode* v = (VariableNode*)node;
-        return symbol_get(v->name);
+        Symbol sym = symbol_get(v->name);
+        return make_value(sym.value, sym.type);
     }
     case NODE_BINARY:
     {
         BinaryNode* b = (BinaryNode*)node;
-        int left = eval(b->left);
-        int right = eval(b->right);
+        Value left = eval(b->left);
+        Value right = eval(b->right);
         //printf("LEFT: %d, RIGHT: %d\n", left, right);
         switch(b->oper){
-            case TOKEN_PLUS: return left + right;
-            case TOKEN_MINUS: return left - right;
-            case TOKEN_MULTPLY: return left * right;
-            case TOKEN_DIVIDE: {if(right != 0 ){ return left/right; }else{printf("Error: Cannot Divide by zero"); exit(1);}}
+            case TOKEN_PLUS: return make_value(left.value + right.value, TYPE_INT);
+            case TOKEN_MINUS: return make_value( left.value - right.value, TYPE_INT);
+            case TOKEN_MULTPLY: return make_value(left.value * right.value, TYPE_INT);
+            case TOKEN_DIVIDE: {if(right.value != 0 ){ return make_value(left.value/right.value, TYPE_INT); }else{printf("Error: Cannot Divide by zero"); exit(1);}}
 
-            case TOKEN_LESS_THAN: return left < right;
-            case TOKEN_GREATER_THAN: return left > right;
-            case TOKEN_LESS_THAN_OR_EQ: return left <= right;
-            case TOKEN_GREAT_THAN_OR_EQ: return left >= right;
-            case TOKEN_EQUALS: return left == right;
-            case TOKEN_NOTEQ: return left!=right;
+            case TOKEN_LESS_THAN: return make_value(left.value < right.value, TYPE_BOOL);
+            case TOKEN_GREATER_THAN: return make_value(left.value > right.value,  TYPE_BOOL);
+            case TOKEN_LESS_THAN_OR_EQ: return make_value(left.value <= right.value, TYPE_BOOL);
+            case TOKEN_GREAT_THAN_OR_EQ: return make_value(left.value >= right.value, TYPE_BOOL);
+            case TOKEN_EQUALS: return make_value(left.value == right.value, TYPE_BOOL);
+            case TOKEN_NOTEQ: return make_value( left.value!=right.value, TYPE_BOOL);
             
-            case TOKEN_AND: return (left && right);
-            case TOKEN_OR: return (left || right);
+            case TOKEN_AND: return make_value(left.value && right.value, TYPE_BOOL);
+            case TOKEN_OR: return make_value(left.value || right.value, TYPE_BOOL);
 
             default:
                 printf("Invalid binary operator: %d\n", b->oper);
@@ -94,12 +100,12 @@ int eval(ASTNode* node){
     case NODE_UNARY:
     {
         UnaryNode* u = (UnaryNode*)node;
-        int val = eval(u->right);
+        Value val = eval(u->right);
         //if(u->oper == TOKEN_MINUS){ return -val;}
         switch (u->oper)
         {
-        case TOKEN_MINUS: return -val;
-        case TOKEN_NOT: return !val;
+        case TOKEN_MINUS: return make_value(-val.value, TYPE_INT);
+        case TOKEN_NOT: return make_value(!(val.value), TYPE_BOOL);
         default:
             printf("Invalid Unary Token: %d", &(u->oper));
             exit(1);
@@ -146,9 +152,9 @@ void exec(ASTNode* node){
         {
             VarDeclNode* v = (VarDeclNode*)node;
 
-            int value = eval(v->value);
+            Value value = eval(v->value);
 
-            symbol_add(v->name, value, v->var_type);
+            symbol_add(v->name, value.value, v->var_type);
             break;
         }
 
@@ -156,9 +162,9 @@ void exec(ASTNode* node){
         {
             AssignNode* a = (AssignNode*)node;
 
-            int value = eval(a->value);
+            Value value = eval(a->value);
 
-            symbol_set(a->name, value);
+            symbol_set(a->name, value.value);
             break;
         }
 
@@ -166,9 +172,9 @@ void exec(ASTNode* node){
         {
             EchoNode* e = (EchoNode*)node;
 
-            int value = eval(e->expression);
+            Value value = eval(e->expression);
 
-            printf("%d", value);
+            printf("%d", value.value);
             for(int i=0; i< e->newLineCount; i++){
                 printf("\n");
             }
@@ -179,9 +185,9 @@ void exec(ASTNode* node){
         {
             IfNode* i = (IfNode*)node;
 
-            int condition = eval(i->condition);
+            Value condition = eval(i->condition);
 
-            if(condition){
+            if(condition.value){
                 exec(i->body);
             }else if(i->else_branch != NULL){
                 exec(i->else_branch);
@@ -192,7 +198,7 @@ void exec(ASTNode* node){
         case NODE_WHILE:
         {
             WhileNode* wh = (WhileNode*)node;
-            while(eval(wh->condition)){
+            while(eval(wh->condition).value){
                 exec(wh->body);
             }
             break;

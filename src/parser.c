@@ -89,9 +89,20 @@
         parser_expect(parser, TOKEN_SEMICOLON);
         return create_echo(expr, newLineCount);
     }
-
+    static VarType type_identifier(TokenType tokType){
+        switch (tokType)
+        {
+        case TOKEN_INT:
+            return TYPE_INT;
+        case TOKEN_BOOL:
+            return TYPE_BOOL;
+        default:
+            printf("Error: Unknown Type");
+            exit(1);
+        }
+    }
     static ASTNode* parse_var_decl(Parser *parser, TokenType type){
-        VarType var_type = (type == TOKEN_BOOL) ? TYPE_BOOL : TYPE_INT;
+        VarType var_type = type_identifier(type);
         parser_expect(parser, type);
         char name[64];
         strcpy(name, parser->current_token.value.ident);
