@@ -9,6 +9,7 @@ int LEXER_DEBUG = 0;
 static TokenType keyword_mapping(const char *ident){
 	if(strcmp(ident, "int") == 0) return TOKEN_INT;
 	if(strcmp(ident, "bool") == 0) return TOKEN_BOOL;
+	if(strcmp(ident, "char") == 0) return TOKEN_CHAR;
 	if(strcmp(ident, "if") == 0) return TOKEN_IF;
 	if(strcmp(ident, "else") == 0) return TOKEN_ELSE;
 	if(strcmp(ident, "while") == 0) return TOKEN_WHILE;
@@ -101,6 +102,19 @@ Token lexer_next_token(Lexer *lexer){
 	if(lexer->current_char == ')'){
 		lexer_advance(lexer);
 		token.type = TOKEN_CLOSE_PAREN;
+		return token;
+	}
+	if(lexer->current_char == '\''){
+		lexer_advance(lexer);
+		token.type = TOKEN_SINGLE_QUOTE;
+		char c = lexer->current_char;
+		lexer_advance(lexer);
+		if(lexer->current_char != '\''){
+			printf("Error: Expected to close the (') quote");
+			exit(1);
+		}
+		lexer_advance(lexer);
+		token.value.int_value = (int)c;
 		return token;
 	}
 	if(lexer->current_char == '{'){

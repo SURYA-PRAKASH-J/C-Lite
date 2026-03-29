@@ -29,6 +29,11 @@ ASTNode* parse_factor(Parser *parser){
         parser_expect(parser, TOKEN_INTEGER);
         return create_literal(value, TYPE_INT);
     }
+    if(parser->current_token.type == TOKEN_SINGLE_QUOTE){
+        int value = parser->current_token.value.int_value;
+        parser_expect(parser, TOKEN_SINGLE_QUOTE);
+        return create_literal(value, TYPE_CHAR);
+    }
 
     if(parser->current_token.type == TOKEN_IDENTIFIER){
         char name[64];

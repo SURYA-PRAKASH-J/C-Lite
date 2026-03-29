@@ -3,9 +3,18 @@
 #include <string.h>
 #include <stdlib.h>
 
+
+//--helpers---
 static inline Value make_value(int val, VarType type) {
     return (Value){.value = val, .type = type};
 }
+
+VarType result_type(VarType a, VarType b){
+    if (a == TYPE_CHAR && b == TYPE_INT) return TYPE_CHAR;
+    if (a == TYPE_INT && b == TYPE_CHAR) return TYPE_CHAR;
+    return TYPE_INT;
+}
+
 
 
 // ---SYMBOL-HANLER---
@@ -77,8 +86,8 @@ Value eval(ASTNode* node){
         Value right = eval(b->right);
         //printf("LEFT: %d, RIGHT: %d\n", left, right);
         switch(b->oper){
-            case TOKEN_PLUS: return make_value(left.value + right.value, TYPE_INT);
-            case TOKEN_MINUS: return make_value( left.value - right.value, TYPE_INT);
+            case TOKEN_PLUS: return make_value(left.value + right.value, result_type(left.type, right.type));
+            case TOKEN_MINUS: return make_value( left.value - right.value, result_type(left.type, right.type));
             case TOKEN_MULTPLY: return make_value(left.value * right.value, TYPE_INT);
             case TOKEN_DIVIDE: {if(right.value != 0 ){ return make_value(left.value/right.value, TYPE_INT); }else{printf("Error: Cannot Divide by zero"); exit(1);}}
 
@@ -173,8 +182,11 @@ void exec(ASTNode* node){
             EchoNode* e = (EchoNode*)node;
 
             Value value = eval(e->expression);
-
-            printf("%d", value.value);
+            if(value.type == TYPE_CHAR){
+                printf("%c", value.value);
+            }else{
+                printf("%d", value.value);
+            }
             for(int i=0; i< e->newLineCount; i++){
                 printf("\n");
             }

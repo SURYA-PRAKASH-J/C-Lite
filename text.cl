@@ -4,8 +4,11 @@ echo a;  //print statement
 
 a = a + 30 - (2 * 12); //Expression Handling
 echo a; 
+char pass = 'a';
+echo pass + 1;
 
 bool isBoolWorking = true;
+echo isBoolWorking + 5;
 int b = 10 + a;
 echo b;
 

@@ -96,6 +96,8 @@
             return TYPE_INT;
         case TOKEN_BOOL:
             return TYPE_BOOL;
+        case TOKEN_CHAR:
+            return TYPE_CHAR;
         default:
             printf("Error: Unknown Type");
             exit(1);
@@ -142,6 +144,8 @@
             case TOKEN_BOOL:
                 return parse_var_decl(parser, TOKEN_BOOL);
                 //break;
+            case TOKEN_CHAR:
+                return parse_var_decl(parser, TOKEN_CHAR);
             case TOKEN_IDENTIFIER:
                 DEBUG_PRINT("Parsed Assignment statemnt\n");
                 return parse_assignment_statement(parser);
