@@ -15,7 +15,14 @@ VarType result_type(VarType a, VarType b){
     return TYPE_INT;
 }
 
+static inline Value make_string(char* s){
+    Value v;
+    v.str = strdup(s);
+    v.type = TYPE_STR;
+    return v;
+}
 
+//--helper-end
 
 // ---SYMBOL-HANLER---
 static Symbol symbols[128];
@@ -31,7 +38,7 @@ int symbol_find(const char *name){
         }
         return -1;
 }
-void symbol_add(const char *name, int value, VarType type){
+void symbol_add(const char *name, Value value, VarType type){
     DEBUG_PRINT("isSymbolFound: %d\n", symbol_find(name));
     for (int i = symbol_count - 1; i >=0; i--){
         if (symbols[i].depth != current_depth) break;
@@ -42,9 +49,14 @@ void symbol_add(const char *name, int value, VarType type){
         }
     }
     strcpy(symbols[symbol_count].name, name);
-    symbols[symbol_count].value = value;
+    //symbols[symbol_count].value = value;
     symbols[symbol_count].type = type;
     symbols[symbol_count].depth = current_depth;
+    if(type == TYPE_STR){
+        symbols[symbol_count].str = strdup(value.str);
+    }else{
+        symbols[symbol_count].value = value.value;
+    }
     symbol_count++;
     DEBUG_PRINT("SYMBOL ADDED\n");
 }
@@ -58,13 +70,17 @@ Symbol symbol_get(const char *name){
     return symbols[i];
 }
 
-void symbol_set(const char *name, int value){
+void symbol_set(const char *name, Value value){
     int i = symbol_find(name);
     if(i==-1){
         printf("Error: undefined variable %s\n", name);
         exit(1);
     }
-    symbols[i].value = value;
+    if(symbols[i].type == TYPE_STR){
+        symbols[i].str = strdup(value.str);
+    }else{
+        symbols[i].value = value.value;
+    }
 }
 
 //---SYMBOL-HANDLER-ENDS---
@@ -72,12 +88,21 @@ Value eval(ASTNode* node){
     switch (node->type)
     {
     case NODE_LITERAL:
-        return make_value(((LiteralNode*)node)->value,TYPE_INT);
+        LiteralNode* lit = (LiteralNode*) node;
+        if(lit->type == TYPE_STR){
+            return make_string(lit->str);
+        }else{
+            return make_value(lit->value, lit->type);
+        }
     case NODE_VARIABLE:
     {
         VariableNode* v = (VariableNode*)node;
         Symbol sym = symbol_get(v->name);
-        return make_value(sym.value, sym.type);
+        if(sym.type == TYPE_STR){
+            return make_string(sym.str);
+        }else{
+            return make_value(sym.value, sym.type);
+        }
     }
     case NODE_BINARY:
     {
@@ -163,7 +188,7 @@ void exec(ASTNode* node){
 
             Value value = eval(v->value);
 
-            symbol_add(v->name, value.value, v->var_type);
+            symbol_add(v->name, value, v->var_type);
             break;
         }
 
@@ -173,7 +198,7 @@ void exec(ASTNode* node){
 
             Value value = eval(a->value);
 
-            symbol_set(a->name, value.value);
+            symbol_set(a->name, value);
             break;
         }
 
@@ -184,7 +209,11 @@ void exec(ASTNode* node){
             Value value = eval(e->expression);
             if(value.type == TYPE_CHAR){
                 printf("%c", value.value);
-            }else{
+            }else if(value.type == TYPE_STR)
+            {
+                printf("%s", value.str);
+            }
+            else{
                 printf("%d", value.value);
             }
             for(int i=0; i< e->newLineCount; i++){

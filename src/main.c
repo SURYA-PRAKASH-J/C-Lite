@@ -8,7 +8,7 @@
 
 /*
 Hmm, cool.
-VERSION = 1.0
+VERSION = 1.1
 I didn't keep track initaially, my bad
 
 

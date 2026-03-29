@@ -7,6 +7,15 @@ ASTNode* create_literal(int val, VarType type){
     node->base.type = NODE_LITERAL;
     node->value = val;
     node->type = type;
+    node->str = NULL;
+    return (ASTNode*) node;
+}
+ASTNode* create_str_literal(const char* str){
+    LiteralNode* node = malloc(sizeof(LiteralNode));
+    node->base.type = NODE_LITERAL;
+    //node->value = NULL;
+    node->type = TYPE_STR;
+    node->str = strdup(str);
     return (ASTNode*) node;
 }
 

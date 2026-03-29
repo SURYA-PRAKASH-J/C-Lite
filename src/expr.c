@@ -54,6 +54,12 @@ ASTNode* parse_factor(Parser *parser){
         parser_expect(parser, TOKEN_FALSE);
         return create_literal(0, TYPE_BOOL);
     }
+    if(parser->current_token.type == TOKEN_STR_LTR){
+        char buffer[256];
+        strcpy(buffer, parser->current_token.value.ident);
+        parser_expect(parser, TOKEN_STR_LTR);
+        return create_str_literal(buffer);
+    }
     DEBUG_PRINT("Error: Unexpected term::%d\n", parser->current_token.type);
     exit(1);
 }

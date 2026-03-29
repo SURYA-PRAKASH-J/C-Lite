@@ -6,7 +6,8 @@
 typedef enum {
     TYPE_INT,
     TYPE_BOOL,
-    TYPE_CHAR
+    TYPE_CHAR,
+    TYPE_STR
 } VarType;
 
 typedef enum{
@@ -48,6 +49,7 @@ typedef struct
 {
     ASTNode base;
     int value;
+    char* str;
     VarType type;
 } LiteralNode;
 
@@ -106,6 +108,7 @@ typedef struct {
 } ProgramNode;
 
 ASTNode* create_literal(int value, VarType type);
+ASTNode* create_str_literal(const char* str);
 ASTNode* create_binary(ASTNode* left, TokenType op, ASTNode* right);
 ASTNode* create_echo(ASTNode* expr, int newLineCount);
 ASTNode* create_if(ASTNode* condition, ASTNode* body, ASTNode* elseBran);
