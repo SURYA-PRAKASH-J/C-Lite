@@ -6,7 +6,7 @@
 
 //--helpers---
 static inline Value make_value(int val, VarType type) {
-    return (Value){.value = val, .type = type};
+    return (Value){.value = val, .type = type, .str = NULL};
 }
 
 VarType result_type(VarType a, VarType b){
@@ -20,6 +20,46 @@ static inline Value make_string(char* s){
     v.str = strdup(s);
     v.type = TYPE_STR;
     return v;
+}
+
+Value string_concat(Value left, Value right){
+    char buffer[512];
+    if(left.type == TYPE_STR && right.type == TYPE_STR){
+        sprintf(buffer, "%s%s", left.str, right.str);
+    }else if(left.type == TYPE_STR){
+        if(right.type ==  TYPE_CHAR){
+            sprintf(buffer, "%s%c", left.str, right.value);
+        }else{
+            sprintf(buffer, "%s%d", left.str , right.value);
+        }
+    }else if(right.type == TYPE_STR){
+        if(left.type == TYPE_CHAR){
+            sprintf(buffer, "%c%s", left.value, right.str);
+        }else{
+            sprintf(buffer, "%d%s", left.value, right.str);
+        }
+        
+    }
+    return make_string(buffer);
+}
+
+Value eval_add(Value left, Value right){
+    if(left.type == TYPE_STR || right.type == TYPE_STR){
+        return string_concat(left, right);
+    }
+    if(left.type == TYPE_CHAR && right.type == TYPE_CHAR){
+        char buffer[3];
+        buffer[0] = left.value;
+        buffer[1] = right.value;
+        buffer[2] = '\0';
+        return make_string(buffer);
+    }
+    if((left.type == TYPE_CHAR && right.type == TYPE_INT) || (left.type == TYPE_INT && right.type == TYPE_CHAR))
+    {
+        return make_value(left.value + right.value, TYPE_CHAR);
+    }
+
+    return make_value(left.value + right.value, TYPE_INT);
 }
 
 //--helper-end
@@ -48,17 +88,42 @@ void symbol_add(const char *name, Value value, VarType type){
             exit(1);
         }
     }
-    strcpy(symbols[symbol_count].name, name);
-    //symbols[symbol_count].value = value;
-    symbols[symbol_count].type = type;
-    symbols[symbol_count].depth = current_depth;
-    if(type == TYPE_STR){
-        symbols[symbol_count].str = strdup(value.str);
-    }else{
-        symbols[symbol_count].value = value.value;
+
+    Symbol* sym = &symbols[symbol_count];
+
+    strcpy(sym->name, name);
+    sym->type = type;
+    sym->depth = current_depth;
+
+    switch(type){
+
+        case TYPE_INT:
+            if(value.type == TYPE_STR){
+                sym->value = strlen(value.str);
+            } else {
+                sym->value = value.value;
+            }
+            break;
+
+        case TYPE_CHAR:
+            if(value.type == TYPE_STR){
+                sym->value = value.str[0];
+            } else {
+                sym->value = value.value;
+            }
+            break;
+
+        case TYPE_STR:
+            sym->str = strdup(value.str);
+            break;
+
+        default:
+            sym->value = value.value;
     }
+
     symbol_count++;
     DEBUG_PRINT("SYMBOL ADDED\n");
+
 }
 
 Symbol symbol_get(const char *name){
@@ -84,6 +149,8 @@ void symbol_set(const char *name, Value value){
 }
 
 //---SYMBOL-HANDLER-ENDS---
+
+
 Value eval(ASTNode* node){
     switch (node->type)
     {
@@ -111,7 +178,7 @@ Value eval(ASTNode* node){
         Value right = eval(b->right);
         //printf("LEFT: %d, RIGHT: %d\n", left, right);
         switch(b->oper){
-            case TOKEN_PLUS: return make_value(left.value + right.value, result_type(left.type, right.type));
+            case TOKEN_PLUS: return eval_add(left, right);
             case TOKEN_MINUS: return make_value( left.value - right.value, result_type(left.type, right.type));
             case TOKEN_MULTPLY: return make_value(left.value * right.value, TYPE_INT);
             case TOKEN_DIVIDE: {if(right.value != 0 ){ return make_value(left.value/right.value, TYPE_INT); }else{printf("Error: Cannot Divide by zero"); exit(1);}}

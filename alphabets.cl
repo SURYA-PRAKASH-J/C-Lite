@@ -1,3 +1,4 @@
 
-string x = "something";
-echo a;
+int y = "alpha";
+echo y + 5;
+

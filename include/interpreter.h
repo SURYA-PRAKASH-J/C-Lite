@@ -15,4 +15,5 @@ typedef struct {
 	char* str;
     VarType type;
 } Value;
+
 Value eval(ASTNode* node);
