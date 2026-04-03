@@ -2,13 +2,11 @@
 
 #define LEXER_H
 #define MAX_IDENT_LEN 64
-#if LEXER_DEBUG
-    #define DEBUG_PRINT(fmt, ...) \
-        printf("DEBUG: " fmt, ##__VA_ARGS__)
-#else
-    #define DEBUG_PRINT(fmt, ...) \
-        ((void)0)
-#endif
+#define DEBUG_PRINT(fmt, ...) \
+    do { \
+        if (LEXER_DEBUG) \
+            printf("DEBUG: [%s] " fmt, DEBUG_TAG, ##__VA_ARGS__); \
+    } while(0)
 
 #include <stdio.h>
 

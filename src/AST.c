@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define DEBUG_TAG "AST"
+
 ASTNode* create_literal(int val, VarType type){
     LiteralNode* node = malloc(sizeof(LiteralNode));
     node->base.type = NODE_LITERAL;

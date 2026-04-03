@@ -4,6 +4,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define DEBUG_TAG "LEXER"
+
 int LEXER_DEBUG = 0;
 
 static TokenType keyword_mapping(const char *ident){

@@ -5,6 +5,8 @@
 #include <string.h>
 #include "AST.h"
 
+#define DEBUG_TAG "EXPR_PARSER"
+
 static ASTNode* parse_term(Parser *parser);
 static ASTNode* parse_factor(Parser *parser);
 

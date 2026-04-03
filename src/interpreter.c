@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define DEBUG_TAG "INTERPRETER"
 
 //--helpers---
 static inline Value make_value(int val, VarType type) {

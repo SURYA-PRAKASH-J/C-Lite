@@ -5,6 +5,7 @@
     #include "expr.h"
     #include "AST.h"
 
+    #define DEBUG_TAG "PARSER"
 
     static ASTNode* parse_block(Parser* parser){
         parser_expect(parser, TOKEN_OPEN_BRACES);

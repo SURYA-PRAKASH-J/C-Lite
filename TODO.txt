@@ -1,0 +1,11 @@
+1. Varaible name doesn't support numbers yet Ex: int x1 = 5; not supported yet
+2. Escape Sequences in string -> \n \t etc
+3. String Comparision
+
+BIG UPDATES [BU]:
+1. ARRAYS
+2. string buffer size should be dynamic not buffer[256]
+
+REFACTORS:
+AFTER BU[1] string should be considered as character array
+
