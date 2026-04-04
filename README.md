@@ -58,21 +58,30 @@ Every token and rule is implemented explicitly.
 
 ```Tree
 C-Lite/
-├── LICENSE
-├── Makefile
-├── README.md
+├── LICENSE  
+├── Makefile  
+├── README.md  
+├── alphabets.cl
+├── clite
 ├── docs
-├── examples
-├── out.o
+│   ├── architecture.md
+│   ├── execution-model.md
+│   └── grammer.md
+├── include
+│   ├── AST.h
+│   ├── expr.h
+│   ├── interpreter.h
+│   ├── lexer.h
+│   └── parser.h
 ├── src
-│   ├── expr.c
-│   ├── expr.h
-│   ├── lexer.c
-│   ├── lexer.h
-│   ├── main.c
-│   ├── parser.c
-│   └── parser.h
+│   ├── AST.c
+│   ├── expr.c
+│   ├── interpreter.c
+│   ├── lexer.c
+│   ├── main.c
+│   └── parser.c
 └── text.cl
+
 ```
 
 ## Building
