@@ -41,6 +41,7 @@ if (b > 20) {
 - Basic if statements
 - Built-in Statement
 - echo for printing values
+- While loop
 
 ## Implementation Details
 
