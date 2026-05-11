@@ -1,133 +1,107 @@
 # C-Lite
 
-**C-Lite** is a minimal, C-inspired interpreted programming language written entirely from scratch in C.
+**C-Lite** is a minimal, C-inspired interpreted programming language written entirely from scratch in C. It features a hand-written lexer, a recursive-descent parser, and an AST-based interpreter.
 
-The main reason I created such is to explore how actual programming language works behind the scenes. Also for my own satisfaction and fun.
+The main reason I created this is to explore how actual programming languages work behind the scenes. Also for my own satisfaction and fun.
 
 C-Lite is intentionally small, explicit, and educational.
 
-## Language Overview
+## Language Features
 
-### Example
+C-Lite supports core programming constructs with explicit typing:
 
-```C-Lite
+### Core Types & Variables
+- **Primitive Types**: `int`, `bool`, `char`, `string` (or `str`).
+- **Declarations**: Explicit typing (e.g., `int a = 10;`).
+- **Assignments**: Standard variable updates.
+
+### Control Flow
+- **If-Else**: Conditional execution with optional `else` and `else if` blocks.
+- **While Loops**: Standard loop constructs for repetitive execution.
+- **Scoping**: Block-level scoping with `{ }`.
+
+### Operators & Logic
+- **Arithmetic**: `+`, `-`, `*`, `/`.
+- **Comparison**: `==`, `!=`, `<`, `>`, `<=`, `>=`.
+- **Logical**: `&&` (AND), `||` (OR), `!` (NOT).
+- **String Concatenation**: Automatic conversion and concatenation using the `+` operator.
+
+### Built-in Statements
+- **echo**: Prints values to the console.
+- **endl**: Keyword for multiple newlines (e.g., `echo "Hello" endl endl;`).
+
+## Example
+
+```c
 int a = 10;
-int b = (a * 2) + 5;
+string name = "C-Lite";
 
-if (b > 20) {
-    echo b;
+if (a > 5) {
+    echo "Welcome to " + name;
+    echo "Value is: " + a endl;
+}
+
+int i = 0;
+while (i < 3) {
+    echo i;
+    i = i + 1;
 }
 ```
 
-## C-Lite currently supports
-
-### Core Features
-
-- Integer variables
-- Variable declaration and assignment
-- Arithmetic expressions (+ - * /)
-- Parentheses with correct operator precedence
-- Single-line comments (//)
-
-### Comparison & Boolean Logic
-
-- > < >= <= == !=
-- Boolean values represented as:
-  - 0 → false
-  - 1 → true
-
-### Control Flow
-
-- Basic if statements
-- Built-in Statement
-- echo for printing values
-- While loop
-
 ## Implementation Details
 
-C-Lite is built using:
+C-Lite follows a classic interpreter pipeline:
 
-- Hand-written lexer (no generator tools)
-- Recursive-descent parser
-- Direct execution during parsing (current architecture)
+1.  **Hand-written Lexer**: Tokenizes source text into a stream of typed tokens.
+2.  **Recursive-Descent Parser**: Builds an **Abstract Syntax Tree (AST)** from the token stream.
+3.  **AST Interpreter**: Traverses the AST and executes nodes using a stack-based symbol table for scoping.
 
-No code generation tools. No hidden abstractions.
-Every token and rule is implemented explicitly.
+No code generation tools (like Flex/Bison) are used. Every token and rule is implemented explicitly in C.
+
+> [!NOTE]
+> All core language logic, the lexer, parser, and interpreter were entirely hand-written. AI was only utilized for structuring the documentation and writing this README.
 
 ## Project Structure
 
-```Tree
+```text
 C-Lite/
-├── LICENSE  
-├── Makefile  
-├── README.md  
-├── alphabets.cl
-├── clite
-├── docs
-│   ├── architecture.md
-│   ├── execution-model.md
-│   └── grammer.md
-├── include
-│   ├── AST.h
-│   ├── expr.h
-│   ├── interpreter.h
-│   ├── lexer.h
-│   └── parser.h
-├── src
-│   ├── AST.c
-│   ├── expr.c
-│   ├── interpreter.c
-│   ├── lexer.c
-│   ├── main.c
-│   └── parser.c
-└── text.cl
-
+├── include/       # Header files defining types and interfaces
+├── src/           # Implementation of lexer, parser, and interpreter
+├── docs/          # Detailed design and grammar specifications
+├── Makefile       # Build configuration
+└── examples/      # Sample scripts (.cl files)
 ```
 
-## Building
+## Getting Started
 
-Using gcc:
+### Building
+
+Ensure you have `gcc` and `make` installed.
 
 ```bash
 make
 ```
 
-Or manually:
+### Running
+
+Run the interpreter with a C-Lite source file:
 
 ```bash
-gcc -Wall -Wextra -o out src/*.c
+./clite text.cl
 ```
 
-Run:
+For debug output (tokens and execution trace):
 
 ```bash
-./out test.cl
+./clite text.cl --debug
 ```
-
-### Debug mode
-
-```bash
-./out test.cl --debug
-```
-
-## Design Philosophy
-
-- Flexiblity
-- structured
-
-## Roadmap
-
-Planned improvements:
-
-- While loops
-- Explicit AST representation
-- Separation of parsing and execution
-- Possible IR or bytecode stage
 
 ## Documentation
 
-Detailed language specification and design notes can be found in the docs/ directory.
-**Note:** Docs under development
+Detailed technical notes are available in the `docs/` directory:
+- [Architecture](docs/architecture.md): Overview of the execution pipeline.
+- [Execution Model](docs/execution-model.md): Symbol tables, scoping, and value representation.
+- [Grammar](docs/grammer.md): Formal language specification.
 
 ## Contributions
 
