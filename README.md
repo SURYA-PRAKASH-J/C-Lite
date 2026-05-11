@@ -103,6 +103,28 @@ Detailed technical notes are available in the `docs/` directory:
 - [Execution Model](docs/execution-model.md): Symbol tables, scoping, and value representation.
 - [Grammar](docs/grammer.md): Formal language specification.
 
+## Roadmap
+
+### Robustness & Stability
+- [ ] **Line & Column Tracking**: Foundation for precise error reporting.
+- [ ] **Meaningful Error Messages**: Detailed feedback on syntax and runtime errors.
+- [ ] **Memory Management**: Implement an Arena Allocator for AST nodes and strings.
+- [ ] **Dynamic Symbol Table**: Support an unlimited number of variables.
+- [ ] **Automated Testing**: Comprehensive test suite for language features.
+
+### Language Features
+- [ ] **User-Defined Functions**: Support for declarations, parameters, and return values.
+- [ ] **Arrays & Collections**: Native support for list-like data structures.
+- [ ] **For Loops**: Traditional iteration constructs.
+- [ ] **Boolean Keywords**: Full integration of true/false literals.
+- [ ] **Standard Library**: Built-in functions for math, string manipulation, and input.
+
+### Performance & Tooling
+- [ ] **Bytecode Compiler & VM**: Move from tree-walking to a more efficient stack machine.
+- [ ] **Constant Folding**: Optimize constant expressions at compile time.
+- [ ] **Interactive REPL**: A live shell for testing C-Lite code snippets.
+- [ ] **IDE Support**: Syntax highlighting for popular editors.
+
 ## Contributions
 
 - Surya Prakash J [obviously me]
