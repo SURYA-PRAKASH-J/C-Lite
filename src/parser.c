@@ -7,6 +7,10 @@
 
     #define DEBUG_TAG "PARSER"
 
+    void parser_error(Parser* parser, const char* msg){
+	    fprintf(stderr, "Parser Error [line: %d, column: %d]: %s\n", parser->current_token.position.line, parser->current_token.position.column, msg);
+        exit(1);
+    }
     static ASTNode* parse_block(Parser* parser){
         parser_expect(parser, TOKEN_OPEN_BRACES);
         BlockNode* block = (BlockNode*) create_block();
@@ -18,7 +22,7 @@
             block_add_statement(block, stmt);
 
             if(parser->current_token.type == TOKEN_EOF){
-                printf("Error: Expected '}' before EOF");
+                parser_error(parser, "Expected '}' before EOF");
             }
         }
         parser_expect(parser, TOKEN_CLOSE_BRACES);
@@ -90,7 +94,7 @@
         parser_expect(parser, TOKEN_SEMICOLON);
         return create_echo(expr, newLineCount);
     }
-    static VarType type_identifier(TokenType tokType){
+    static VarType type_identifier(Parser* parser, TokenType tokType){
         switch (tokType)
         {
         case TOKEN_INT:
@@ -102,12 +106,11 @@
         case TOKEN_STRING:
             return TYPE_STR;
         default:
-            printf("Error: Unknown Type");
-            exit(1);
+            parser_error(parser, "Unknown Type");
         }
     }
     static ASTNode* parse_var_decl(Parser *parser, TokenType type){
-        VarType var_type = type_identifier(type);
+        VarType var_type = type_identifier(parser, type);
         parser_expect(parser, type);
         char name[64];
         strcpy(name, parser->current_token.value.ident);
@@ -167,8 +170,9 @@
             case TOKEN_WHILE:
                 return parse_while(parser);
             default:
-                printf("Parse Error: Unexpected token %d\n", parser->current_token.type);
-                exit(1);
+            char buffer[256];
+            snprintf(buffer, sizeof(buffer), "Parse Error: Unexpected token %s", token_type_to_string(parser->current_token.type));
+            parser_error(parser, buffer);
         }
     }
 
@@ -184,8 +188,9 @@
 
     void parser_expect(Parser *parser, TokenType type) {
         if (parser->current_token.type != type){
-            printf("Parser Error: expected %d, got %d\n",type, parser->current_token.type );
-            exit(1);
+            char buffer[256];
+            snprintf(buffer, sizeof(buffer), "Expected %s , got %s", token_type_to_string(type), token_type_to_string(parser->current_token.type));
+            parser_error(parser, buffer);
         }
         parser_advance(parser);
     }

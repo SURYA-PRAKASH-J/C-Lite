@@ -12,9 +12,15 @@
 
 extern int LEXER_DEBUG;
 
+typedef struct{
+	int line;
+	int column;
+}Position;
+
 typedef struct {
 	FILE* fp;
 	int current_char;
+	Position position;
 } Lexer;
 
 //TOKENS
@@ -59,21 +65,24 @@ typedef enum{
 	TOKEN_ENDL
 } TokenType;
 
+
 typedef struct{
 	TokenType  type;
 	union {
 		int int_value;
 		char ident[MAX_IDENT_LEN]; 
 	}value;
+	Position position;
 }Token;
+
+void lexer_error(Lexer* lexer, const char* msg);
 
 Token lexer_next_token(Lexer *lexer);
 
 
 //lexer's
 
-
-
+const char* token_type_to_string(TokenType type);
 void lexer_init(Lexer *lexer, FILE *fp);
 void lexer_advance(Lexer *lexer);
 #endif

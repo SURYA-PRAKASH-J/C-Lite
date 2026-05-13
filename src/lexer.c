@@ -26,16 +26,63 @@ static TokenType keyword_mapping(const char *ident){
 	return TOKEN_IDENTIFIER;
 }
 
+const char* token_type_to_string(TokenType type){
+	switch(type){
+		case TOKEN_EOF: return "EOF";
+		case TOKEN_INT: return "INT";
+		case TOKEN_IDENTIFIER: return "IDENTIFIER";
+		case TOKEN_INTEGER: return "INTEGER";
+		case TOKEN_BOOL: return "BOOL";
+		case TOKEN_CHAR: return "CHAR";
+		case TOKEN_STRING: return "STRING";
+		case TOKEN_IF: return "IF";
+		case TOKEN_ELSE: return "ELSE";
+		case TOKEN_WHILE: return "WHILE";
+		case TOKEN_RETURN: return "RETURN";
+		case TOKEN_TRUE: return "TRUE";
+		case TOKEN_FALSE: return "FALSE";
+		case TOKEN_ECHO: return "ECHO";
+		case TOKEN_ENDL: return "ENDL";
+		case TOKEN_PLUS: return "+";
+		case TOKEN_MINUS: return "-";
+		case TOKEN_MULTPLY: return "*";
+		case TOKEN_DIVIDE: return "/";
+		case TOKEN_OPEN_PAREN: return "(";
+		case TOKEN_CLOSE_PAREN: return ")";
+		case TOKEN_SINGLE_QUOTE: return "'SINGLE_QUOTE'";
+		case TOKEN_STR_LTR: return "STR_LTR";
+		case TOKEN_OPEN_BRACES: return "{";
+		case TOKEN_CLOSE_BRACES: return "}";
+		case TOKEN_NOTEQ: return "!=";
+		case TOKEN_NOT: return "!";
+		case TOKEN_AND: return "&";
+		case TOKEN_OR: return "|";
+		case TOKEN_LESS_THAN: return "<";
+		case TOKEN_LESS_THAN_OR_EQ: return "<=";
+		case TOKEN_GREATER_THAN: return ">";
+		case TOKEN_GREAT_THAN_OR_EQ: return ">=";
+		case TOKEN_EQUALS: return "==";
+		case TOKEN_ASSIGN: return "=";
+		case TOKEN_SEMICOLON: return ";";
+		case TOKEN_UNKOWN: return "UNKOWN";
+	}
+	return "UNKNOWN";
+}
 
+void lexer_error(Lexer* lexer, const char* msg){
+	fprintf(stderr, "Lexer Error [line: %d, column: %d]: %s\n", lexer->position.line, lexer->position.column, msg);
+	exit(1);
+}
 
 Token lexer_next_token(Lexer *lexer){
-
-	Token token;
-
+	
 	while(isspace((unsigned char)lexer->current_char)){
 		DEBUG_PRINT("Skipping whitespace\n");
 		lexer_advance(lexer);
 	}
+	Position start = lexer->position;
+	Token token;
+	token.position = start;
 
 	if(lexer->current_char == EOF){
 		token.type = TOKEN_EOF;
@@ -57,7 +104,7 @@ Token lexer_next_token(Lexer *lexer){
 
 	if(isalpha((unsigned char)lexer->current_char) || lexer->current_char == '_'){
 		int len = 0;
-		while(isalpha((unsigned char)lexer->current_char) || lexer->current_char == '_'){
+		while(isalnum((unsigned char)lexer->current_char) || lexer->current_char == '_'){
 			if (len < MAX_IDENT_LEN - 1){
 				token.value.ident[len++] = lexer->current_char;
 			}
@@ -114,8 +161,7 @@ Token lexer_next_token(Lexer *lexer){
 		char c = lexer->current_char;
 		lexer_advance(lexer);
 		if(lexer->current_char != '\''){
-			printf("Error: Expected to close the (') quote");
-			exit(1);
+			lexer_error(lexer, "Error: Expected to close the (') quote");
 		}
 		lexer_advance(lexer);
 		token.value.int_value = (int)c;
@@ -127,15 +173,14 @@ Token lexer_next_token(Lexer *lexer){
 		int len = 0;
 		char buffer[256];
 
-		while(lexer->current_char != '"' && lexer->current_char != TOKEN_EOF){
+		while(lexer->current_char != '"' && lexer->current_char != EOF){
 			if(len < 255){
 				buffer[len++] = lexer->current_char;
 			}
 			lexer_advance(lexer);
 		}
 		if(lexer->current_char != '"'){
-			printf("Error: String termination missing\n");
-			exit(1);
+			lexer_error(lexer, "Error: String termination missing");
 		}
 		lexer_advance(lexer);
 		buffer[len] = '\0';
@@ -169,8 +214,7 @@ Token lexer_next_token(Lexer *lexer){
 			token.type = TOKEN_AND;
 			return token;
 		}
-		printf("Invalid Token '&'\n");
-		exit(1);
+		lexer_error(lexer, "Invalid Token '&'");
 	}
 	if(lexer->current_char == '|'){
 		lexer_advance(lexer);
@@ -179,8 +223,7 @@ Token lexer_next_token(Lexer *lexer){
 			token.type = TOKEN_OR;
 			return token;
 		}
-		printf("Invalid Token '|'\n");
-		exit(1);
+		lexer_error(lexer, "Invalid Token '|'");
 	}
 	if(lexer->current_char == '<'){
 		lexer_advance(lexer);
@@ -235,9 +278,17 @@ Token lexer_next_token(Lexer *lexer){
 void lexer_init(Lexer *lexer, FILE *fp){
 	lexer->fp = fp;
 	lexer->current_char = fgetc(fp);
+	lexer->position.line = 1;
+	lexer->position.column = 1;
 }
 
 void lexer_advance(Lexer *lexer){
+	if(lexer->current_char == '\n'){
+		lexer->position.line++;
+		lexer->position.column = 1;
+	}else{
+		lexer->position.column += 1;
+	}
 	lexer->current_char = fgetc(lexer->fp);
 	DEBUG_PRINT("Advancing\n");
 }
