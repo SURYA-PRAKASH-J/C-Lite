@@ -106,7 +106,7 @@ Detailed technical notes are available in the `docs/` directory:
 ## Roadmap
 
 ### Robustness & Stability
-- [ ] **Line & Column Tracking**: Foundation for precise error reporting.
+- [*] **Line & Column Tracking**: Foundation for precise error reporting.
 - [ ] **Meaningful Error Messages**: Detailed feedback on syntax and runtime errors.
 - [ ] **Memory Management**: Implement an Arena Allocator for AST nodes and strings.
 - [ ] **Dynamic Symbol Table**: Support an unlimited number of variables.
