@@ -1,50 +1,50 @@
-#include <stdio.h>
-#include<string.h>
-#include <stdlib.h>
+#include "AST.h"
+#include "interpreter.h"
 #include "lexer.h"
 #include "parser.h"
-#include "interpreter.h"
-#include "AST.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 /*
 Hmm, cool.
-VERSION = 1.1
+VERSION = 1.2
 I didn't keep track initaially, my bad
 
 
-Updating this everytime i get a segfaults from now on [added pretty late but i rememebered the count]
-SEGFAULTs = 4
+Updating this everytime i get a segfaults from now on [added pretty late but
+i rememebered the count]
+SEGFAULTs = 5
 */
-int main(int argc, char *argv[]){
-	if(argc < 2){
-		printf("Usage: <filename>.cl [--debug]\n");
-		return 1;
-	}
-	if (argc >=3 && strcmp(argv[2], "--debug")==0){
-		LEXER_DEBUG = 1;
-	}
-	//Token tok;
-	FILE* fptr = fopen(argv[1], "r");
-	
-	if(fptr == NULL){
-		printf("Error: \"%s\" file does not exist\n", argv[1]);
-		return 1;
-	}
+int main(int argc, char *argv[]) {
+  if (argc < 2) {
+    printf("Usage: <filename>.cl [--debug]\n");
+    return 1;
+  }
+  if (argc >= 3 && strcmp(argv[2], "--debug") == 0) {
+    LEXER_DEBUG = 1;
+  }
+  // Token tok;
+  FILE *fptr = fopen(argv[1], "r");
 
-	Lexer lexer;
-	lexer_init(&lexer, fptr);
-	/*
-	do{
-		tok = lexer_next_token(&lexer);
-		DEBUG_PRINT("Token: %d\n", tok.type);
-	}while(tok.type != TOKEN_EOF);
-	*/
-	Parser parser;
-	parser_init(&parser, &lexer);
-	//parse_program(&parser);
-	ASTNode* program = parse_program(&parser);
-	exec(program);
-	fclose(fptr);
-	return 0;
+  if (fptr == NULL) {
+    printf("Error: \"%s\" file does not exist\n", argv[1]);
+    return 1;
+  }
 
+  Lexer lexer;
+  lexer_init(&lexer, fptr);
+  /*
+  do{
+          tok = lexer_next_token(&lexer);
+          DEBUG_PRINT("Token: %d\n", tok.type);
+  }while(tok.type != TOKEN_EOF);
+  */
+  Parser parser;
+  parser_init(&parser, &lexer);
+  // parse_program(&parser);
+  ASTNode *program = parse_program(&parser);
+  exec(program);
+  fclose(fptr);
+  return 0;
 }

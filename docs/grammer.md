@@ -3,11 +3,13 @@
 The following is the formal grammar for C-Lite, represented in a variant of EBNF.
 
 ## Top-Level
+
 ```text
 program        → statement*
 ```
 
 ## Statements
+
 ```text
 statement      → declaration
                | assignment
@@ -31,6 +33,7 @@ echo_statement → "echo" expression ( "endl" )* ";"
 ```
 
 ## Expressions (Precedence: Low to High)
+
 ```text
 expression     → logic_or
 
@@ -59,7 +62,8 @@ primary        → INTEGER
 ```
 
 ## Tokens
--   `IDENTIFIER`: `[a-zA-Z_][a-zA-Z0-9_]*`
--   `INTEGER`: `[0-9]+`
--   `STRING_LITERAL`: `"[^"]*"`
--   `CHAR_LITERAL`: `'[^']'`
+
+- `IDENTIFIER`: `[a-zA-Z_][a-zA-Z0-9_]*`
+- `INTEGER`: `[0-9]+`
+- `STRING_LITERAL`: `"[^"]*"`
+- `CHAR_LITERAL`: `'[^']'`
