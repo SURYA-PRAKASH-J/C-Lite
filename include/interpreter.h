@@ -16,4 +16,11 @@ typedef struct {
     VarType type;
 } Value;
 
+typedef struct{
+	char name[64];
+	ASTNode* body;
+
+} FunctionSymbol;
+
+
 Value eval(ASTNode* node);

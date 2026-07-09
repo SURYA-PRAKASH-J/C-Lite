@@ -1,10 +1,18 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Iinclude
-SRC = src/main.c src/lexer.c src/parser.c src/expr.c src/AST.c src/interpreter.c
+CFLAGS = -Wall -Wextra -g -O0 -Iinclude #-fsanitize=address 
+#LDFLAGS = -fsanitize=address
+
+SRC := $(wildcard src/*.c)
+HDR := $(wildcard include/*.h)
+
 OUT = clite
 
-all:
-	$(CC) $(CFLAGS) -o $(OUT) $(SRC)
+$(OUT): $(SRC) $(HDR)
+	$(CC) $(CFLAGS) -o $@ $(SRC)
+
+all: $(OUT)
 
 clean:
 	rm -f $(OUT)
+
+.PHONY: all clean

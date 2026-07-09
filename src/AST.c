@@ -119,3 +119,45 @@ void block_add_statement(BlockNode *block, ASTNode *stmt)
 
     block->statements[block->count++] = stmt;
 }
+
+ASTNode* create_func_declaration(const char* name, ASTNode* body, Parameter *params){
+    FunctionDeclNode* node = malloc(sizeof(FunctionDeclNode));
+    node->body = body;
+    node->base.type = NODE_FUNCTION_DECL;
+    node->name = strdup(name);
+    node->params = ;
+    return (ASTNode*)node;
+}
+
+ASTNode* create_function_call(const char* name){
+    FunctionCallNode* node = malloc(sizeof(FunctionCallNode));
+    node->base.type = NODE_FUNCTION_CALL;
+    node->name = strdup(name);
+    return (ASTNode*)node;
+}
+
+void destroy_ast(ASTNode *node){
+    if(!node) return;
+    switch (node->type) {
+        case NODE_FUNCTION_DECL:
+        {
+            FunctionDeclNode *f = (FunctionDeclNode*)node;
+            destroy_ast(f->body);
+            free(f->name);
+            free(f);
+            break;
+        }
+        case NODE_BLOCK:
+        {
+        BlockNode *b = (BlockNode *)node;
+
+        for (int i = 0; i < b->count; i++)
+            destroy_ast(b->statements[i]);
+
+        free(b);
+        break;
+        }
+    }
+
+    //free(node);
+}

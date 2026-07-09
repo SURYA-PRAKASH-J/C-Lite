@@ -7,8 +7,14 @@
 typedef struct{
 	Lexer *lexer;
 	Token current_token;
+	Token next_token;
 } Parser;
 
+typedef struct {
+    Lexer lexer;
+    Token current_token;
+    Token next_token;
+} ParserState;
 void parser_init(Parser *parser, Lexer *lexer);
 void parser_advance(Parser *parser);
 void parser_expect(Parser *parser, TokenType type);

@@ -1,4 +1,6 @@
 #include "interpreter.h"
+#include "function_table.h"
+#include "AST.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -18,7 +20,7 @@ VarType result_type(VarType a, VarType b){
 
 static inline Value make_string(char* s){
     Value v;
-    v.str = strdup(s);
+    v.str = s;
     v.type = TYPE_STR;
     return v;
 }
@@ -218,6 +220,7 @@ Value eval(ASTNode* node){
     default:
         printf("Eval Error\n");
         exit(1);
+        //printf("");
     }
 }
 
@@ -310,6 +313,19 @@ void exec(ASTNode* node){
             while(eval(wh->condition).value){
                 exec(wh->body);
             }
+            break;
+        }
+        case NODE_FUNCTION_DECL:
+        {
+            FunctionDeclNode* fndcl = (FunctionDeclNode*)node;
+            function_add(fndcl->name, fndcl->body);
+            break;
+        }
+        case NODE_FUNCTION_CALL:
+        {
+            FunctionCallNode* fncl = (FunctionCallNode*)node;
+            ASTNode* block = function_get(fncl->name);
+            exec(block);
             break;
         }
         default:

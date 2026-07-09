@@ -10,6 +10,12 @@ typedef enum {
     TYPE_STR
 } VarType;
 
+typedef struct{
+    char *name;
+    VarType type;
+}Parameter;
+
+
 typedef enum{
     NODE_PROGRAM,
     NODE_VAR_DECL,
@@ -22,7 +28,9 @@ typedef enum{
     NODE_BLOCK,
     NODE_LITERAL,
     NODE_VARIABLE,
-    NODE_UNARY
+    NODE_UNARY,
+    NODE_FUNCTION_DECL,
+    NODE_FUNCTION_CALL
 } NodeType;
 
 typedef struct ASTNode
@@ -73,6 +81,7 @@ typedef struct
     ASTNode* value;
 } AssignNode;
 
+
 typedef struct 
 {
     ASTNode base;
@@ -102,10 +111,28 @@ typedef struct
     int capacity;
 }BlockNode;
 
+typedef struct
+{
+    ASTNode base;
+    char* name;
+    Parameter *params;
+    int param_count;
+    ASTNode *body;
+}FunctionDeclNode ;
+
+typedef struct
+{
+    ASTNode base;
+    char* name;
+    //args later
+
+}FunctionCallNode;
+
 typedef struct {
     ASTNode base;
     BlockNode* body;
 } ProgramNode;
+
 
 ASTNode* create_literal(int value, VarType type);
 ASTNode* create_str_literal(const char* str);
@@ -119,7 +146,9 @@ ASTNode* create_unary(TokenType oper, ASTNode* operand);
 ASTNode* create_assignment(const char* name, ASTNode* value);
 ASTNode* create_variable(const char* name);
 ASTNode* create_var_decl(const char* name, ASTNode* value, VarType var_type);
+ASTNode* create_func_declaration(const char* name, ASTNode* body);
+ASTNode* create_function_call(const char* name);
 void block_add_statement(BlockNode* block, ASTNode* stmt);
-
+void destroy_ast(ASTNode *node);
 
 #endif

@@ -1,0 +1,86 @@
+[
+  {
+    "file": "src/main.c",
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-o",
+      "clite",
+      "src/main.c"
+    ],
+    "directory": "/home/surya/C-Lite",
+    "output": "clite"
+  },
+  {
+    "file": "src/lexer.c",
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-o",
+      "clite",
+      "src/lexer.c"
+    ],
+    "directory": "/home/surya/C-Lite",
+    "output": "clite"
+  },
+  {
+    "file": "src/parser.c",
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-o",
+      "clite",
+      "src/parser.c"
+    ],
+    "directory": "/home/surya/C-Lite",
+    "output": "clite"
+  },
+  {
+    "file": "src/expr.c",
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-o",
+      "clite",
+      "src/expr.c"
+    ],
+    "directory": "/home/surya/C-Lite",
+    "output": "clite"
+  },
+  {
+    "file": "src/AST.c",
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-o",
+      "clite",
+      "src/AST.c"
+    ],
+    "directory": "/home/surya/C-Lite",
+    "output": "clite"
+  },
+  {
+    "file": "src/interpreter.c",
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-o",
+      "clite",
+      "src/interpreter.c"
+    ],
+    "directory": "/home/surya/C-Lite",
+    "output": "clite"
+  }
+]

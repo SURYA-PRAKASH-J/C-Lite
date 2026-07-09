@@ -4,6 +4,7 @@
     #include <stdlib.h>
     #include "expr.h"
     #include "AST.h"
+#include "lexer.h"
 
     #define DEBUG_TAG "PARSER"
 
@@ -141,8 +142,59 @@
         ASTNode* body = parse_block(parser);
         return create_while(condition, body);
     }
+    
+    ASTNode* parse_function(Parser* parser, char* name){
+        //parser_expect(parser, TOKEN_IDENTIFIER);
+        ASTNode* body = parse_block(parser);
+        return create_func_declaration(name, body);
+    }
 
+    ASTNode* create_func_call(Parser* parser, char* name /*args later*/){
+        //parser_expect(parser, TOKEN_SEMICOLON);
+        return create_function_call(name);
+    }
 
+    ASTNode* parse_parameter(Parser* parser){
+
+    }
+
+    ASTNode* parse_args(Parser* parser){
+        
+    }
+
+    ASTNode* parse_identifier(Parser* parser){
+        char name[64];
+        strcpy(name, parser->current_token.value.ident);
+        parser_expect(parser, TOKEN_IDENTIFIER);
+        parser_expect(parser, TOKEN_OPEN_PAREN);
+
+        //ParserState save = *parser;
+
+        // switch(parser->current_token.type){
+        //     case TOKEN_INT: //or bool or whatver datatype it is param
+        //     case TOKEN_BOOL:
+        //     case TOKEN_CHAR:
+        //     case TOKEN_STRING:
+        //         parse_parameter(parser);
+        //         break;
+        //     case TOKEN_IDENTIFIER:
+        //         parse_args(parser);
+        //         break;
+        //     default:
+        //         parser_error(parser, "Unexpected Token");
+
+        // }
+        // //parse parameters later
+        
+        parser_expect(parser, TOKEN_CLOSE_PAREN);
+        if(parser->current_token.type == TOKEN_OPEN_BRACES){
+            return parse_function(parser, name);
+        } else{
+            parser_expect(parser, TOKEN_SEMICOLON);
+            return create_func_call(parser, name);
+        }
+    }
+        
     ASTNode* parse_statement(Parser* parser){
         switch (parser->current_token.type) {
             case TOKEN_INT:
@@ -155,9 +207,15 @@
             case TOKEN_STRING:
                 return parse_var_decl(parser, TOKEN_STRING);
             case TOKEN_IDENTIFIER:
-                DEBUG_PRINT("Parsed Assignment statemnt\n");
-                return parse_assignment_statement(parser);
-                //break;
+                if(parser->next_token.type==TOKEN_ASSIGN){
+                    DEBUG_PRINT("Parsed Assignment statemnt\n");
+                    return parse_assignment_statement(parser);
+                }
+                if(parser->next_token.type == TOKEN_OPEN_PAREN){
+                    return parse_identifier(parser); //parser->current_token.value.ident);
+                }
+                parser_error(parser, "Unexpected identifier");
+                exit(1);
             case TOKEN_OPEN_BRACES:
                 return parse_block(parser);
                 //break;
@@ -180,10 +238,12 @@
     void parser_init(Parser *parser, Lexer *lexer){
         parser->lexer = lexer;
         parser->current_token = lexer_next_token(lexer);
+        parser->next_token = lexer_next_token(lexer);
     }
 
     void parser_advance(Parser *parser){
-        parser->current_token = lexer_next_token(parser->lexer);
+        parser->current_token = parser->next_token;
+        parser->next_token = lexer_next_token(parser->lexer);
     }
 
     void parser_expect(Parser *parser, TokenType type) {
