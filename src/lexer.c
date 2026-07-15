@@ -155,6 +155,11 @@ Token lexer_next_token(Lexer *lexer){
 		token.type = TOKEN_CLOSE_PAREN;
 		return token;
 	}
+	if(lexer->current_char == ','){
+		lexer_advance(lexer);
+		token.type = TOKEN_COMMA;
+		return token;
+	}
 	if(lexer->current_char == '\''){
 		lexer_advance(lexer);
 		token.type = TOKEN_SINGLE_QUOTE;
@@ -275,20 +280,35 @@ Token lexer_next_token(Lexer *lexer){
 
 
 
-void lexer_init(Lexer *lexer, FILE *fp){
-	lexer->fp = fp;
-	lexer->current_char = fgetc(fp);
+void lexer_init(Lexer *lexer, char* buffer){
+	lexer->source = buffer;
+	lexer->length = strlen(buffer);
+	lexer->pos = 0;
 	lexer->position.line = 1;
 	lexer->position.column = 1;
+	if (lexer->length > 0)
+        lexer->current_char = lexer->source[0];
+    else
+        lexer->current_char = EOF;
+
 }
 
-void lexer_advance(Lexer *lexer){
-	if(lexer->current_char == '\n'){
-		lexer->position.line++;
-		lexer->position.column = 1;
-	}else{
-		lexer->position.column += 1;
-	}
-	lexer->current_char = fgetc(lexer->fp);
-	DEBUG_PRINT("Advancing\n");
+void lexer_advance(Lexer *lexer)
+{
+    if (lexer->current_char == '\n') {
+        lexer->position.line++;
+        lexer->position.column = 1;
+    } else {
+        lexer->position.column++;
+    }
+
+    lexer->pos++;
+
+    if (lexer->pos >= lexer->length) {
+        lexer->current_char = EOF;
+    } else {
+        lexer->current_char = lexer->source[lexer->pos];
+    }
+
+    DEBUG_PRINT("Advancing\n");
 }

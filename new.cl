@@ -1,12 +1,5 @@
-char start = 'A';
-
 foo(){
-
-    echo "foo executed";
+    echo "func exec";
 }
 
-while(start != 'Z'){
-    echo start;
-    start = start+1;
-}
 foo();

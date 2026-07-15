@@ -12,6 +12,23 @@
 	    fprintf(stderr, "Parser Error [line: %d, column: %d]: %s\n", parser->current_token.position.line, parser->current_token.position.column, msg);
         exit(1);
     }
+
+    ParserState saveState(Parser* parser){
+        ParserState state;
+        state.lexer = *parser->lexer;
+        state.current_token = parser->current_token;
+        state.next_token = parser->next_token;
+        return state;
+    }
+
+    void parserRestore(Parser *parser, ParserState *state)
+    {
+        *parser->lexer = state->lexer;
+        parser->current_token = state->current_token;
+        parser->next_token = state->next_token;
+    }
+
+
     static ASTNode* parse_block(Parser* parser){
         parser_expect(parser, TOKEN_OPEN_BRACES);
         BlockNode* block = (BlockNode*) create_block();
@@ -143,55 +160,139 @@
         return create_while(condition, body);
     }
     
-    ASTNode* parse_function(Parser* parser, char* name){
+    ASTNode* parse_function(Parser* parser, char* name, ParameterList params){
         //parser_expect(parser, TOKEN_IDENTIFIER);
         ASTNode* body = parse_block(parser);
-        return create_func_declaration(name, body);
+        return create_func_declaration(name, body, params);
     }
 
-    ASTNode* create_func_call(Parser* parser, char* name /*args later*/){
+    ASTNode* create_func_call(Parser* parser, char* name, ArgumentList args){
         //parser_expect(parser, TOKEN_SEMICOLON);
-        return create_function_call(name);
+        return create_function_call(name, args);
     }
 
-    ASTNode* parse_parameter(Parser* parser){
-
+    ParameterList parse_parameter(Parser* parser){
+        //Parameter *params = NULL;
+        //int count = 0;
+        int capacity = 4;
+        ParameterList list;
+        list.params = malloc(sizeof(Parameter) * capacity);
+        list.count = 0;
+        while(parser->current_token.type!=TOKEN_CLOSE_PAREN){
+            VarType var_type = type_identifier(parser, parser->current_token.type);
+            parser_expect(parser, parser->current_token.type);
+            char name[64];
+            strcpy(name, parser->current_token.value.ident);
+            parser_expect(parser, TOKEN_IDENTIFIER);
+            if (list.count >= capacity) {
+                capacity *= 2;
+                list.params = realloc(list.params, sizeof(Parameter) * capacity);
+            }
+            //if(parser->next_token.type != TOKEN_CLOSE_PAREN) parser_expect(parser, TOKEN_COMMA); //STUPID LINE OF CODE
+            if (parser->current_token.type == TOKEN_COMMA) parser_expect(parser, TOKEN_COMMA);
+            list.params[list.count].type = var_type;
+            list.params[list.count].name = strdup(name);
+            list.count++;
+        }
+        return list;
     }
 
-    ASTNode* parse_args(Parser* parser){
-        
+    ArgumentList parse_args(Parser *parser)
+    {
+        int capacity = 4;
+
+        ArgumentList list;
+        list.args = malloc(sizeof(ASTNode*) * capacity);
+        list.count = 0;
+
+        while (parser->current_token.type != TOKEN_CLOSE_PAREN) {
+            if (list.count >= capacity) {
+                capacity *= 2;
+                list.args = realloc(list.args,sizeof(ASTNode*) * capacity);
+            }
+            list.args[list.count++] = parse_expression(parser);
+            if (parser->current_token.type == TOKEN_COMMA)
+                parser_expect(parser, TOKEN_COMMA);
+        }
+
+        return list;
+    }
+
+    int is_type(TokenType type){
+        switch (type) {
+            case TOKEN_BOOL:
+            case TOKEN_INT:
+            case TOKEN_STRING:
+            case TOKEN_CHAR:
+                return 1;
+                
+        }
+        return 0;
     }
 
     ASTNode* parse_identifier(Parser* parser){
         char name[64];
         strcpy(name, parser->current_token.value.ident);
-        parser_expect(parser, TOKEN_IDENTIFIER);
-        parser_expect(parser, TOKEN_OPEN_PAREN);
+        // parser_expect(parser, TOKEN_IDENTIFIER);
+        // parser_expect(parser, TOKEN_OPEN_PAREN);
 
-        //ParserState save = *parser;
+        // ParserState state = saveState(parser);
 
-        // switch(parser->current_token.type){
-        //     case TOKEN_INT: //or bool or whatver datatype it is param
-        //     case TOKEN_BOOL:
-        //     case TOKEN_CHAR:
-        //     case TOKEN_STRING:
-        //         parse_parameter(parser);
-        //         break;
-        //     case TOKEN_IDENTIFIER:
-        //         parse_args(parser);
-        //         break;
-        //     default:
-        //         parser_error(parser, "Unexpected Token");
+        // //Parameter *params = parse_parameter(parser);
+        // ParameterList params = parse_parameter(parser);
+        // //parser_expect(parser, TOKEN_CLOSE_PAREN);
 
-        // }
-        // //parse parameters later
+        // parser_expect(parser, TOKEN_CLOSE_PAREN);
+        // if(parser->current_token.type == TOKEN_OPEN_BRACES){
+        //     return parse_function(parser, name, params);
+        // } 
+
+        // parserRestore(parser, &state);
+        // ArgumentList args = parse_args(parser);
         
-        parser_expect(parser, TOKEN_CLOSE_PAREN);
-        if(parser->current_token.type == TOKEN_OPEN_BRACES){
-            return parse_function(parser, name);
-        } else{
+        // parser_expect(parser, TOKEN_CLOSE_PAREN);
+        // parser_expect(parser, TOKEN_SEMICOLON);
+        // return create_func_call(parser, name, args);
+
+        parser_expect(parser, TOKEN_IDENTIFIER);
+        parser_expect(parser,TOKEN_OPEN_PAREN);
+
+        if (parser->current_token.type == TOKEN_CLOSE_PAREN) {
+            ParserState state = saveState(parser);
+            parser_expect(parser, TOKEN_CLOSE_PAREN);
+            if(parser->current_token.type == TOKEN_OPEN_BRACES){
+                ParameterList emptyParams = {
+                    .params = NULL,
+                    .count = 0
+                };
+                return parse_function(parser, name, emptyParams);
+            }
+            parserRestore(parser, &state);
+            parser_expect(parser, TOKEN_CLOSE_PAREN);
             parser_expect(parser, TOKEN_SEMICOLON);
-            return create_func_call(parser, name);
+
+            ArgumentList emptyArgs = {
+                .args = NULL,
+                .count = 0
+            };
+            return create_function_call(name, emptyArgs);
+
+        }
+        else if (is_type(parser->current_token.type)) {
+
+            ParameterList params = parse_parameter(parser);
+            parser_expect(parser, TOKEN_CLOSE_PAREN);
+            if (parser->current_token.type != TOKEN_OPEN_BRACES)
+                parser_error(parser, "Expected '{' after parameter list");
+
+            return parse_function(parser, name, params);
+        } else {
+            ArgumentList args = parse_args(parser);
+
+            parser_expect(parser, TOKEN_CLOSE_PAREN);
+            parser_expect(parser, TOKEN_SEMICOLON);
+
+            return create_function_call(name, args);
         }
     }
         

@@ -120,19 +120,21 @@ void block_add_statement(BlockNode *block, ASTNode *stmt)
     block->statements[block->count++] = stmt;
 }
 
-ASTNode* create_func_declaration(const char* name, ASTNode* body, Parameter *params){
+ASTNode* create_func_declaration(const char* name, ASTNode* body, ParameterList params){
     FunctionDeclNode* node = malloc(sizeof(FunctionDeclNode));
     node->body = body;
     node->base.type = NODE_FUNCTION_DECL;
     node->name = strdup(name);
-    node->params = ;
+    node->params = params;
+    //node->params = ;
     return (ASTNode*)node;
 }
 
-ASTNode* create_function_call(const char* name){
+ASTNode* create_function_call(const char* name, ArgumentList args){
     FunctionCallNode* node = malloc(sizeof(FunctionCallNode));
     node->base.type = NODE_FUNCTION_CALL;
     node->name = strdup(name);
+    node->arguments = args;
     return (ASTNode*)node;
 }
 

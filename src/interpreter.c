@@ -43,7 +43,7 @@ Value string_concat(Value left, Value right){
         }
         
     }
-    return make_string(buffer);
+    return make_string(strdup(buffer));
 }
 
 Value eval_add(Value left, Value right){
@@ -318,14 +318,25 @@ void exec(ASTNode* node){
         case NODE_FUNCTION_DECL:
         {
             FunctionDeclNode* fndcl = (FunctionDeclNode*)node;
-            function_add(fndcl->name, fndcl->body);
+            function_add(fndcl->name, fndcl->body, fndcl->params);
             break;
         }
         case NODE_FUNCTION_CALL:
         {
             FunctionCallNode* fncl = (FunctionCallNode*)node;
-            ASTNode* block = function_get(fncl->name);
-            exec(block);
+            FunctionSymbol fn = function_get(fncl->name);
+            if(fncl->arguments.count != fn.params.count){
+                printf("Error: Args didn't match the parameters");   
+                exit(1);
+            }
+            //current_depth++;
+            for(int i = 0; i<fn.params.count; i++){
+                Parameter p = fn.params.params[i];
+                Value value = eval(fncl->arguments.args[i]);
+                symbol_add(p.name, value, p.type);
+            }
+            exec(fn.body);
+            //current_depth--;
             break;
         }
         default:

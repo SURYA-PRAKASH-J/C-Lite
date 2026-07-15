@@ -18,10 +18,19 @@ typedef struct{
 }Position;
 
 typedef struct {
-	FILE* fp;
+    const char *source;
+    size_t length;
+    size_t pos;
 	int current_char;
-	Position position;
+    Position position;
 } Lexer;
+
+
+// typedef struct {
+// 	FILE* fp;
+// 	int current_char;
+// 	Position position;
+// } Lexer;
 
 //TOKENS
 
@@ -62,7 +71,8 @@ typedef enum{
 	TOKEN_ECHO,
 	TOKEN_SINGLE_QUOTE,
 	TOKEN_STR_LTR,
-	TOKEN_ENDL
+	TOKEN_ENDL,
+	TOKEN_COMMA
 } TokenType;
 
 
@@ -83,6 +93,6 @@ Token lexer_next_token(Lexer *lexer);
 //lexer's
 
 const char* token_type_to_string(TokenType type);
-void lexer_init(Lexer *lexer, FILE *fp);
+void lexer_init(Lexer *lexer, char* buffer);
 void lexer_advance(Lexer *lexer);
 #endif

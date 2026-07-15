@@ -8,9 +8,11 @@
 
 /*
 Hmm, cool.
-VERSION = 1.2
+VERSION = 1.3
 I didn't keep track initaially, my bad
 
+
+lol what
 
 Updating this everytime i get a segfaults from now on 
 [added pretty late but i rememebered the count]
@@ -32,8 +34,17 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
+  fseek(fptr, 0, SEEK_END);
+  long size = ftell(fptr);
+  rewind(fptr);
+
+  char* buffer = malloc(size + 1);
+  fread(buffer, 1, size, fptr);
+  buffer[size] = '\0';
+
+
   Lexer lexer;
-  lexer_init(&lexer, fptr);
+  lexer_init(&lexer, buffer);
   /*
   do{
           tok = lexer_next_token(&lexer);

@@ -8,10 +8,11 @@
 static FunctionSymbol functions[64];
 static int function_count = 0;
 
-void function_add(const char* name, ASTNode* body){
+void function_add(const char* name, ASTNode* body, ParameterList params){
     //printf("Adding Function");
     strcpy(functions[function_count].name, name);
     functions[function_count].body = body;
+    functions[function_count].params = params;
     function_count++;
 }
 
@@ -24,10 +25,10 @@ int function_find(const char* name){
     return -1;
 }
 
-ASTNode* function_get(const char* name){
+FunctionSymbol function_get(const char* name){
     int i = function_find(name);
     if(i!=-1){
-        return functions[i].body;
+        return functions[i];
     }
     printf("Error Cannot find function : %s", name);
     exit(1);

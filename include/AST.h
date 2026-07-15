@@ -15,6 +15,12 @@ typedef struct{
     VarType type;
 }Parameter;
 
+typedef struct {
+    Parameter *params;
+    int count;
+} ParameterList;
+
+
 
 typedef enum{
     NODE_PROGRAM,
@@ -44,7 +50,12 @@ typedef struct
     ASTNode* left;
     ASTNode* right;
     TokenType oper;
-} BinaryNode;
+} BinaryNode;    
+
+typedef struct {
+    ASTNode **args;
+    int count;
+} ArgumentList;
 
 typedef struct
 {
@@ -115,7 +126,7 @@ typedef struct
 {
     ASTNode base;
     char* name;
-    Parameter *params;
+    ParameterList params;
     int param_count;
     ASTNode *body;
 }FunctionDeclNode ;
@@ -124,7 +135,7 @@ typedef struct
 {
     ASTNode base;
     char* name;
-    //args later
+    ArgumentList arguments;
 
 }FunctionCallNode;
 
@@ -146,8 +157,8 @@ ASTNode* create_unary(TokenType oper, ASTNode* operand);
 ASTNode* create_assignment(const char* name, ASTNode* value);
 ASTNode* create_variable(const char* name);
 ASTNode* create_var_decl(const char* name, ASTNode* value, VarType var_type);
-ASTNode* create_func_declaration(const char* name, ASTNode* body);
-ASTNode* create_function_call(const char* name);
+ASTNode* create_func_declaration(const char* name, ASTNode* body, ParameterList params);
+ASTNode* create_function_call(const char* name, ArgumentList args);
 void block_add_statement(BlockNode* block, ASTNode* stmt);
 void destroy_ast(ASTNode *node);
 

@@ -18,6 +18,7 @@ typedef struct {
 
 typedef struct{
 	char name[64];
+	ParameterList params;
 	ASTNode* body;
 
 } FunctionSymbol;

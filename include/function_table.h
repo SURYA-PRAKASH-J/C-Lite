@@ -4,7 +4,7 @@
 #include "AST.h"
 
 
-void function_add(const char* name, ASTNode* body);
+void function_add(const char* name, ASTNode* body, ParameterList params);
 int function_find(const char* name);
-ASTNode* function_get(const char* name);
+FunctionSymbol function_get(const char* name);
 #endif
