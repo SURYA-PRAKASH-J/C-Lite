@@ -382,4 +382,3 @@ ASTNode* parse_program(Parser *parser){
         
         //parser_expect(parser, TOKEN_EOF);
     }
-

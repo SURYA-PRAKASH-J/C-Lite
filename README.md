@@ -1,145 +1,106 @@
 # C-Lite
 
-**C-Lite** is a minimal, C-inspired interpreted programming language written entirely from scratch in C. It features a hand-written lexer, a recursive-descent parser, and an AST-based interpreter.
+**C-Lite** is a minimal, C-inspired interpreted scripting language written entirely from scratch in C. It features a hand-written lexer, a recursive-descent parser, and an Abstract Syntax Tree (AST) tree-walking interpreter.
 
-The main reason I created this is to explore how actual programming languages work behind the scenes. Also for my own satisfaction and fun.
+This project was built to explore how compilers/interpreters work behind the scenes, without relying on code generation tools like Flex/Bison.
 
-C-Lite is intentionally small, explicit, and educational.
+---
 
 ## Language Features
 
-C-Lite supports core programming constructs with explicit typing:
-
 ### Core Types & Variables
 - **Primitive Types**: `int`, `bool`, `char`, `string` (or `str`).
-- **Declarations**: Explicit typing (e.g., `int a = 10;`).
-- **Assignments**: Standard variable updates.
+- **Variable Declarations**: Explicit typing (e.g. `int a = 10;`, `string name = "C-Lite";`).
+- **Variable Assignments**: Reassigning values without repeating the type (e.g. `a = 20;`).
+
+### Scope & Shadowing
+- Block-level lexical scoping using `{ }`.
+- Variable shadowing: inner scopes can shadow variables defined in outer scopes.
 
 ### Control Flow
-- **If-Else**: Conditional execution with optional `else` and `else if` blocks.
-- **While Loops**: Standard loop constructs for repetitive execution.
-- **Scoping**: Block-level scoping with `{ }`.
+- **If-Else**: Conditional execution with optional `else` and `else if` blocks. Parentheses around conditions are optional.
+- **While Loops**: Repeats execution as long as the condition is non-zero (or true).
 
 ### Operators & Logic
-- **Arithmetic**: `+`, `-`, `*`, `/`.
+- **Arithmetic**: `+` (addition/concatenation), `-` (subtraction/negation), `*` (multiplication), `/` (integer division).
 - **Comparison**: `==`, `!=`, `<`, `>`, `<=`, `>=`.
 - **Logical**: `&&` (AND), `||` (OR), `!` (NOT).
-- **String Concatenation**: Automatic conversion and concatenation using the `+` operator.
+- **String Concatenation**: Automatic coercion of other primitives to strings when using the `+` operator (e.g., `"Value: " + 42` evaluates to `"Value: 42"`).
+
+### Functions / Procedures
+- Declared using name and parameters: `myFunction(int paramA, bool paramB) { ... }`.
+- Can be called like: `myFunction(10, true);`.
+- Functions do not specify a return type and currently do not support return statements (they act as procedures).
+- *Note*: Function parameters are added directly to the caller's scope level and leak after function completion (see [Execution Model Docs](docs/execution-model.md) for details).
 
 ### Built-in Statements
-- **echo**: Prints values to the console.
-- **endl**: Keyword for multiple newlines (e.g., `echo "Hello" endl endl;`).
+- **echo**: Prints expression values. Example: `echo "Hello " + name;`.
+- **endl**: Increments the newline count when placed at the end of an echo statement. Example: `echo "Hello" endl endl;` (prints "Hello" followed by three newlines).
 
-## Example
+---
 
-```c
-int a = 10;
-string name = "C-Lite";
+## Technical Documentation
 
-if (a > 5) {
-    echo "Welcome to " + name;
-    echo "Value is: " + a endl;
-}
+Detailed technical design notes are available in the `docs/` directory:
+- [Architecture](docs/architecture.md): Execution pipeline stages, file structure, and diagrams.
+- [Execution Model](docs/execution-model.md): Type system conversion rules, scoping mechanisms, and interpreter quirks.
+- [Grammar Specification](docs/grammar.md): Formal EBNF rules defining tokens, statements, and operator precedence.
+- [Documentation Index](docs/index.html): Simple local browser landing page.
 
-int i = 0;
-while (i < 3) {
-    echo i;
-    i = i + 1;
-}
-```
-
-## Implementation Details
-
-C-Lite follows a classic interpreter pipeline:
-
-1.  **Hand-written Lexer**: Tokenizes source text into a stream of typed tokens.
-2.  **Recursive-Descent Parser**: Builds an **Abstract Syntax Tree (AST)** from the token stream.
-3.  **AST Interpreter**: Traverses the AST and executes nodes using a stack-based symbol table for scoping.
-
-No code generation tools (like Flex/Bison) are used. Every token and rule is implemented explicitly in C.
-
-> [!NOTE]
-> All core language logic, the lexer, parser, and interpreter were entirely hand-written. AI was only utilized for structuring the documentation and writing this README.
+---
 
 ## Project Structure
 
 ```text
 C-Lite/
-├── include/       # Header files defining types and interfaces
-├── src/           # Implementation of lexer, parser, and interpreter
-├── docs/          # Detailed design and grammar specifications
-├── Makefile       # Build configuration
-└── examples/      # Sample scripts (.cl files)
+├── include/       # C header files defining AST, Lexer, Parser, and Interpreter
+├── src/           # C source code files
+├── docs/          # Technical documentation and specs
+├── examples/      # Well-commented sample .cl scripts
+├── Makefile       # GCC compiler build configuration
+└── LICENSE        # Project license
 ```
+
+---
 
 ## Getting Started
 
-### Building
+### Prerequisites
+Make sure you have GCC compiler and Make installed.
+```bash
+sudo apt install build-essential
+```
 
-Ensure you have `gcc` and `make` installed.
-
+### Building C-Lite
+Compile the interpreter executable using the provided Makefile:
 ```bash
 make
 ```
+This builds the `clite` executable in the root workspace directory.
 
-### Running
-
-Run the interpreter with a C-Lite source file:
-
+### Running Scripts
+Run the interpreter on a source file:
 ```bash
-./clite text.cl
+./clite examples/basics.cl
 ```
 
-For debug output (tokens and execution trace):
-
+To enable token and execution debug logging:
 ```bash
-./clite text.cl --debug
+./clite examples/basics.cl --debug
 ```
 
-## Documentation
+---
 
-Detailed technical notes are available in the `docs/` directory:
-- [Architecture](docs/architecture.md): Overview of the execution pipeline.
-- [Execution Model](docs/execution-model.md): Symbol tables, scoping, and value representation.
-- [Grammar](docs/grammer.md): Formal language specification.
+## Examples Catalog
 
-## Roadmap
+Check the [examples/](file:///home/surya/C-Lite/examples) directory for working demo scripts:
+1. **[basics.cl](file:///home/surya/C-Lite/examples/basics.cl)**: Variable declarations, printing, basic arithmetic, and logical expressions.
+2. **[control_flow.cl](file:///home/surya/C-Lite/examples/control_flow.cl)**: Conditionals (`if`/`else if`/`else`), block scoping, variable shadowing, and `while` loop iteration.
+3. **[functions.cl](file:///home/surya/C-Lite/examples/functions.cl)**: Declaring and invoking procedures, parameter passing, and scoping behavior.
+4. **[type_conversions.cl](file:///home/surya/C-Lite/examples/type_conversions.cl)**: Working conversions (length extraction, first char extraction, type mixing in string concatenation) and warnings about coercion limitations.
 
-### Robustness & Stability
-- [x] **Line & Column Tracking**: Foundation for precise error reporting.
-- [ ] **Meaningful Error Messages**: Detailed feedback on syntax and runtime errors.
-- [ ] **Memory Management**: Implement an Arena Allocator for AST nodes and strings.
-- [ ] **Dynamic Symbol Table**: Support an unlimited number of variables.
-- [ ] **Automated Testing**: Comprehensive test suite for language features.
-
-### Language Features
-- [ ] **User-Defined Functions**: Support for declarations, parameters, and return values.
-- [ ] **Arrays & Collections**: Native support for list-like data structures.
-- [ ] **For Loops**: Traditional iteration constructs.
-- [ ] **Boolean Keywords**: Full integration of true/false literals.
-- [ ] **Standard Library**: Built-in functions for math, string manipulation, and input.
-
-### Performance & Tooling
-- [ ] **Bytecode Compiler & VM**: Move from tree-walking to a more efficient stack machine.
-- [ ] **Constant Folding**: Optimize constant expressions at compile time.
-- [ ] **Interactive REPL**: A live shell for testing C-Lite code snippets.
-- [ ] **IDE Support**: Syntax highlighting for popular editors.
-
-## Contributions
-
-- Surya Prakash J [obviously me]
-
-Contributions, issues, and feature requests are welcome!
-Feel free to fork the repo and submit a pull request.
-
-## Why This Project
-
-Because I thought how hard could it be (*Pretty hard actually*)
+---
 
 ## License
 
 MIT
-
-## Author
-
-Surya Prakash J
