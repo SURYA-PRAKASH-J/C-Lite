@@ -3,604 +3,440 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>C-Lite Language Reference Manual</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <title>C-Lite Reference Manual</title>
     <style>
-        /* Modern Design System - Dark Mode Slate Palette */
-        :root {
-            --bg-main: #0f172a;
-            --bg-sidebar: #1e293b;
-            --bg-card: #1e293b;
-            --bg-code: #020617;
-            --border-color: #334155;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --accent-blue: #38bdf8;
-            --accent-teal: #2dd4bf;
-            --accent-rose: #f43f5e;
-            --accent-emerald: #10b981;
-            
-            --sidebar-width: 280px;
-        }
-
-        * {
-            box-sizing: border-box;
+        /* Traditional / Academic Documentation Theme */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #333333;
+            background-color: #fcfcfc;
+            line-height: 1.6;
             margin: 0;
             padding: 0;
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-main);
-            color: var(--text-primary);
-            line-height: 1.6;
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar Styling */
-        aside {
-            width: var(--sidebar-width);
-            background-color: var(--bg-sidebar);
-            border-right: 1px solid var(--border-color);
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            overflow-y: auto;
-            padding: 2rem 1.5rem;
-            z-index: 100;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 2.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .brand-logo {
-            width: 28px;
-            height: 28px;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-teal));
-            border-radius: 6px;
-        }
-
-        .brand-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            letter-spacing: -0.025em;
-            background: linear-gradient(to right, var(--text-primary), var(--accent-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .nav-section-title {
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-secondary);
-            margin: 1.5rem 0 0.5rem 0;
-        }
-
-        .nav-links {
-            list-style: none;
-        }
-
-        .nav-links a {
-            display: block;
-            padding: 0.5rem 0.75rem;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            border-radius: 6px;
-            transition: all 0.2s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--text-primary);
-            background-color: rgba(255, 255, 255, 0.05);
-            padding-left: 1rem;
-        }
-
-        .nav-links a.active {
-            color: var(--accent-blue);
-            background-color: rgba(56, 189, 248, 0.1);
-            font-weight: 600;
-        }
-
-        /* Main Content Styling */
-        main {
-            margin-left: var(--sidebar-width);
-            flex: 1;
-            padding: 3rem 4rem;
-            max-width: 1000px;
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 3rem;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
         }
 
         header {
-            margin-bottom: 3rem;
-            padding-bottom: 2rem;
-            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2.5rem;
+            border-bottom: 2px solid #333333;
+            padding-bottom: 1.5rem;
         }
 
         h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            margin-bottom: 0.5rem;
+            font-family: Georgia, serif;
+            font-size: 2.2rem;
+            font-weight: normal;
+            color: #000000;
+            margin: 0 0 0.5rem 0;
         }
 
-        .subtitle {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-        }
-
-        section {
-            margin-bottom: 4rem;
-            scroll-margin-top: 2rem;
+        .meta {
+            font-size: 0.95rem;
+            color: #666666;
+            font-style: italic;
         }
 
         h2 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 1.25rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 0.5rem;
-            color: var(--accent-blue);
+            font-family: Georgia, serif;
+            font-size: 1.5rem;
+            font-weight: normal;
+            color: #000000;
+            margin: 2.5rem 0 1rem 0;
+            border-bottom: 1px solid #cccccc;
+            padding-bottom: 0.3rem;
         }
 
         h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin: 1.5rem 0 0.75rem 0;
+            font-size: 1.15rem;
+            font-weight: bold;
+            color: #111111;
+            margin: 1.5rem 0 0.5rem 0;
         }
 
         p {
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
+            margin: 0 0 1.2rem 0;
+            text-align: justify;
         }
 
-        strong {
-            color: var(--text-primary);
+        a {
+            color: #0056b3;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background-color: #f9f9f9;
+            border: 1px solid #dddddd;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 4px;
+        }
+
+        .toc-title {
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            font-family: Georgia, serif;
+            font-size: 1.1rem;
+        }
+
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .toc li {
+            margin-bottom: 0.4rem;
+        }
+
+        .toc li ul {
+            padding-left: 1.5rem;
+            margin-top: 0.2rem;
         }
 
         /* Code Blocks */
         pre {
-            background-color: var(--bg-code);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.25rem;
+            background-color: #f7f7f7;
+            border: 1px solid #e0e0e0;
+            padding: 1rem;
             overflow-x: auto;
-            margin: 1.25rem 0;
+            border-radius: 3px;
+            margin: 1.2rem 0;
         }
 
         code {
-            font-family: 'Fira Code', monospace;
-            font-size: 0.85rem;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 0.9rem;
+            color: #000000;
         }
 
         p code, li code {
-            background-color: var(--bg-code);
-            border: 1px solid var(--border-color);
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-            color: var(--accent-teal);
+            background-color: #f4f4f4;
+            padding: 0.15rem 0.3rem;
+            border-radius: 3px;
+            border: 1px solid #e8e8e8;
+            font-size: 0.85em;
         }
-
-        /* Syntax Highlighting Colors */
-        .token-keyword { color: var(--accent-blue); font-weight: bold; }
-        .token-type { color: var(--accent-teal); }
-        .token-string { color: #f43f5e; }
-        .token-comment { color: #64748b; font-style: italic; }
-        .token-number { color: #fb923c; }
-        .token-boolean { color: #a78bfa; }
 
         /* Tables */
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 1.5rem 0;
-            font-size: 0.9rem;
         }
 
         th, td {
-            padding: 0.75rem 1rem;
+            border: 1px solid #dddddd;
+            padding: 0.6rem 0.8rem;
             text-align: left;
-            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
         }
 
         th {
-            background-color: rgba(255, 255, 255, 0.02);
-            color: var(--text-primary);
-            font-weight: 600;
+            background-color: #f2f2f2;
+            font-weight: bold;
         }
 
-        td {
-            color: var(--text-secondary);
-        }
-
-        /* Callout Cards */
-        .callout {
-            border-left: 4px solid var(--accent-blue);
-            background-color: rgba(56, 189, 248, 0.05);
-            padding: 1.25rem;
-            border-radius: 0 8px 8px 0;
+        /* Callouts / Warnings */
+        .note-box {
+            background-color: #fffdf5;
+            border-left: 4px solid #d4b106;
+            padding: 1rem 1.2rem;
             margin: 1.5rem 0;
         }
 
-        .callout-title {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
+        .note-box-title {
+            font-weight: bold;
+            color: #a08204;
+            margin-bottom: 0.4rem;
+            font-size: 0.95rem;
         }
 
-        .callout.warning {
-            border-left-color: var(--accent-rose);
-            background-color: rgba(244, 63, 94, 0.05);
+        .note-box.warning {
+            background-color: #fff9f9;
+            border-left-color: #cc0000;
         }
 
-        .callout.warning .callout-title {
-            color: var(--accent-rose);
-        }
-
-        .callout.success {
-            border-left-color: var(--accent-emerald);
-            background-color: rgba(16, 185, 129, 0.05);
-        }
-
-        .callout.success .callout-title {
-            color: var(--accent-emerald);
+        .note-box.warning .note-box-title {
+            color: #cc0000;
         }
 
         /* Lists */
         ul, ol {
-            margin-left: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--text-secondary);
-            font-size: 0.95rem;
+            margin: 0 0 1.2rem 1.5rem;
         }
 
         li {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
         }
 
-        /* Footer */
         footer {
-            margin-top: 6rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--border-color);
-            text-align: center;
-            color: #64748b;
+            margin-top: 5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #dddddd;
             font-size: 0.85rem;
-        }
-
-        footer a {
-            color: var(--accent-blue);
-            text-decoration: none;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-            }
-            aside {
-                position: relative;
-                width: 100%;
-                border-right: none;
-                border-bottom: 1px solid var(--border-color);
-                padding: 1.5rem;
-            }
-            main {
-                margin-left: 0;
-                padding: 2rem;
-            }
+            color: #777777;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
-    <!-- Sidebar Navigation -->
-    <aside>
-        <div class="brand">
-            <div class="brand-logo"></div>
-            <div class="brand-title">C-Lite Reference</div>
-        </div>
-        
-        <nav>
-            <div class="nav-section-title">Introduction</div>
-            <ul class="nav-links">
-                <li><a href="#intro">Welcome & Goals</a></li>
-                <li><a href="#getting-started">Getting Started</a></li>
-            </ul>
+<div class="container">
+    <header>
+        <h1>C-Lite Reference Manual</h1>
+        <div class="meta">Version 1.0 &bull; Language Specification and Reference</div>
+    </header>
 
-            <div class="nav-section-title">Core Syntax</div>
-            <ul class="nav-links">
-                <li><a href="#data-types">Variables & Types</a></li>
-                <li><a href="#operators">Operators</a></li>
-                <li><a href="#control-flow">Control Flow</a></li>
-                <li><a href="#scoping">Scoping & Shadowing</a></li>
-            </ul>
+    <p>
+        <strong>C-Lite</strong> is a small, C-inspired interpreted scripting language written from scratch in C. The language implementation uses a hand-written lexer, a recursive-descent parser, and an Abstract Syntax Tree (AST) tree-walking interpreter.
+    </p>
 
-            <div class="nav-section-title">Subroutines</div>
-            <ul class="nav-links">
-                <li><a href="#functions">Functions / Procedures</a></li>
-            </ul>
+    <!-- Table of Contents -->
+    <div class="toc">
+        <div class="toc-title">Contents</div>
+        <ul>
+            <li><a href="#1-getting-started">1. Getting Started</a></li>
+            <li><a href="#2-lexical-conventions">2. Lexical Conventions</a></li>
+            <li><a href="#3-variables-and-types">3. Variables and Types</a></li>
+            <li><a href="#4-expressions-and-operators">4. Expressions and Operators</a></li>
+            <li><a href="#5-control-flow">5. Control Flow</a></li>
+            <li><a href="#6-scoping-rules">6. Scoping Rules</a></li>
+            <li><a href="#7-procedures">7. Procedures (Functions)</a></li>
+            <li><a href="#8-implicit-conversions">8. Implicit Type Conversions</a></li>
+        </ul>
+    </div>
 
-            <div class="nav-section-title">Type Coercion</div>
-            <ul class="nav-links">
-                <li><a href="#type-conversions">Conversions & Limits</a></li>
-            </ul>
+    <!-- Section 1 -->
+    <h2 id="1-getting-started">1. Getting Started</h2>
+    <p>
+        The interpreter takes a source code file (typically with a <code>.cl</code> extension) and walks the generated AST nodes directly. To compile the interpreter, execute the build configuration:
+    </p>
+    <pre><code>make</code></pre>
+    <p>
+        To run a script file, call the interpreter binary:
+    </p>
+    <pre><code>./clite script.cl</code></pre>
+    <p>
+        To output debug traces (lexer tokens, parser steps, and interpreter evaluation logs), pass the <code>--debug</code> command-line argument:
+    </p>
+    <pre><code>./clite script.cl --debug</code></pre>
 
-            <div class="nav-section-title">References</div>
-            <ul class="nav-links">
-                <li><a href="grammar.md">EBNF Grammar Specification</a></li>
-                <li><a href="architecture.md">Architecture Specification</a></li>
-                <li><a href="execution-model.md">Execution Model Docs</a></li>
-            </ul>
-        </nav>
-    </aside>
+    <!-- Section 2 -->
+    <h2 id="2-lexical-conventions">2. Lexical Conventions</h2>
+    <p>
+        <strong>Identifiers</strong> are sequences of letters, digits, and underscores, starting with a letter or underscore: <code>[a-zA-Z_][a-zA-Z0-9_]*</code>.
+    </p>
+    <p>
+        <strong>Keywords</strong> are reserved and cannot be used as identifiers:
+        <code>int</code>, <code>bool</code>, <code>char</code>, <code>str</code>, <code>string</code>, <code>if</code>, <code>else</code>, <code>while</code>, <code>return</code>, <code>true</code>, <code>false</code>, <code>echo</code>, and <code>endl</code>.
+    </p>
+    <p>
+        <strong>Literals</strong> represent fixed values. Standard integers, single-quoted characters (e.g., <code>'a'</code>), and double-quoted strings (e.g., <code>"hello"</code>) are parsed as literals. Backslash escape sequences (e.g., <code>\n</code> or <code>\"</code>) are not parsed and are read as literal characters.
+    </p>
+    <p>
+        <strong>Comments</strong> are single-line, starting with <code>//</code> and ending at the next newline character.
+    </p>
 
-    <!-- Main Content -->
-    <main>
-        <header>
-            <h1>C-Lite Programming Language</h1>
-            <p class="subtitle">A complete reference guide, syntax walk-through, and execution model documentation handbook.</p>
-        </header>
+    <!-- Section 3 -->
+    <h2 id="3-variables-and-types">3. Variables and Types</h2>
+    <p>
+        C-Lite is explicitly typed. A variable must be declared with a specific type before it can be updated or used. Variable declaration syntax requires a type name, an identifier, an assignment operator, and an initializing expression.
+    </p>
+    <pre><code>int count = 0;
+bool isFinished = false;
+char marker = 'X';
+string message = "Starting script...";</code></pre>
+    <p>
+        Subsequent updates to declared variables use assignment statements without repeating the type:
+    </p>
+    <pre><code>count = count + 1;
+isFinished = true;</code></pre>
 
-        <!-- Welcome Section -->
-        <section id="intro">
-            <h2>Introduction</h2>
-            <p>
-                <strong>C-Lite</strong> is a minimal, structured scripting language inspired by standard C syntax. It is implemented with a hand-written tokenizer, an Abstract Syntax Tree (AST) recursive-descent parser, and a tree-walking interpreter.
-            </p>
-            <p>
-                The language is designed to offer clean block scoping, explicit type definitions, standard operators, conditional execution, loops, and custom procedures. It prioritizes syntax transparency and predictable scoping rules.
-            </p>
-        </section>
+    <!-- Section 4 -->
+    <h2 id="4-expressions-and-operators">4. Expressions and Operators</h2>
+    <p>
+        Expressions are evaluated recursively. Operator precedence is fixed in the parser from lowest to highest:
+    </p>
+    <table>
+        <thead>
+            <tr>
+                <th>Operators</th>
+                <th>Description</th>
+                <th>Associativity</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>||</code></td>
+                <td>Logical OR</td>
+                <td>Left-to-right</td>
+            </tr>
+            <tr>
+                <td><code>&amp;&amp;</code></td>
+                <td>Logical AND</td>
+                <td>Left-to-right</td>
+            </tr>
+            <tr>
+                <td><code>==</code>, <code>!=</code></td>
+                <td>Equality comparisons</td>
+                <td>Left-to-right</td>
+            </tr>
+            <tr>
+                <td><code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code></td>
+                <td>Relational comparisons</td>
+                <td>Left-to-right</td>
+            </tr>
+            <tr>
+                <td><code>+</code>, <code>-</code></td>
+                <td>Addition, subtraction, and string concatenation</td>
+                <td>Left-to-right</td>
+            </tr>
+            <tr>
+                <td><code>*</code>, <code>/</code></td>
+                <td>Multiplication and division</td>
+                <td>Left-to-right</td>
+            </tr>
+            <tr>
+                <td><code>!</code>, <code>-</code></td>
+                <td>Logical NOT and unary negation</td>
+                <td>Right-to-left</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="note-box warning">
+        <div class="note-box-title">Division by Zero</div>
+        <p>
+            The division operator (<code>/</code>) performs integer division. Division by an expression that evaluates to <code>0</code> is caught at runtime and aborts execution with a division by zero error.
+        </p>
+    </div>
 
-        <!-- Getting Started -->
-        <section id="getting-started">
-            <h2>Getting Started</h2>
-            <p>To run C-Lite scripts, compile the interpreter using the Makefile in the repository root directory:</p>
-            
-            <pre><code><span class="token-comment"># Build the clite executable</span>
-make
-
-<span class="token-comment"># Execute a script (.cl file)</span>
-./clite examples/basics.cl
-
-<span class="token-comment"># Run with debug flags to dump tokenizer states and execution traces</span>
-./clite examples/basics.cl --debug</code></pre>
-        </section>
-
-        <!-- Data Types -->
-        <section id="data-types">
-            <h2>Variables & Data Types</h2>
-            <p>C-Lite variables must be declared explicitly with their corresponding types. Variable updates use simple assignments.</p>
-            
-            <h3>Supported Types</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Type Name</th>
-                        <th>Description</th>
-                        <th>Example Literal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><code>int</code></td>
-                        <td>32-bit signed integers</td>
-                        <td><code>42</code>, <code>-10</code></td>
-                    </tr>
-                    <tr>
-                        <td><code>bool</code></td>
-                        <td>Boolean state indicators</td>
-                        <td><code>true</code>, <code>false</code></td>
-                    </tr>
-                    <tr>
-                        <td><code>char</code></td>
-                        <td>Single-byte character values</td>
-                        <td><code>'A'</code>, <code>'z'</code></td>
-                    </tr>
-                    <tr>
-                        <td><code>string</code> or <code>str</code></td>
-                        <td>Heap-allocated text sequences</td>
-                        <td><code>"Hello World"</code></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3>Usage Example</h3>
-            <pre><code><span class="token-comment">// Declarations</span>
-<span class="token-type">int</span> count = 10;
-<span class="token-type">bool</span> active = <span class="token-boolean">true</span>;
-<span class="token-type">char</span> grade = 'A';
-<span class="token-type">string</span> greeting = "Hello C-Lite!";
-
-<span class="token-comment">// Assignments (do not repeat the type)</span>
-count = 25;
-active = <span class="token-boolean">false</span>;</code></pre>
-        </section>
-
-        <!-- Operators -->
-        <section id="operators">
-            <h2>Operators & Expressions</h2>
-            <p>Expressions combine literals, variables, and operators. Evaluated expressions produce a typed runtime value.</p>
-            
-            <h3>Arithmetic Operators</h3>
-            <ul>
-                <li><code>+</code> : Addition / Concatenation</li>
-                <li><code>-</code> : Subtraction / Negation</li>
-                <li><code>*</code> : Multiplication</li>
-                <li><code>/</code> : Integer Division (aborts on division-by-zero)</li>
-            </ul>
-
-            <h3>Comparison & Logical Operators</h3>
-            <ul>
-                <li><strong>Comparisons</strong>: <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code></li>
-                <li><strong>Logical operations</strong>: <code>&amp;&amp;</code> (AND), <code>||</code> (OR), <code>!</code> (NOT)</li>
-            </ul>
-
-            <h3>Usage Example</h3>
-            <pre><code><span class="token-type">int</span> a = 20;
-<span class="token-type">int</span> b = 3;
-<span class="token-type">int</span> sum = a + b;           <span class="token-comment">// 23</span>
-<span class="token-type">int</span> division = a / b;      <span class="token-comment">// 6 (integer division)</span>
-<span class="token-type">bool</span> isGreater = a > b;    <span class="token-comment">// true</span>
-<span class="token-type">bool</span> matches = (a == 20) && !active;</code></pre>
-        </section>
-
-        <!-- Control Flow -->
-        <section id="control-flow">
-            <h2>Control Flow</h2>
-            <p>Control flow structures use boolean expressions to determine which code blocks execute.</p>
-            
-            <h3>Conditionals (If-Else)</h3>
-            <p>Conditionals can contain optional <code>else if</code> and <code>else</code> blocks. Parentheses around conditions are optional.</p>
-            <pre><code><span class="token-keyword">if</span> score >= 90 {
-    echo "Excellent!" endl;
-} <span class="token-keyword">else if</span> score >= 80 {
-    echo "Very Good!" endl;
-} <span class="token-keyword">else</span> {
-    echo "Keep practicing." endl;
+    <!-- Section 5 -->
+    <h2 id="5-control-flow">5. Control Flow</h2>
+    <p>
+        C-Lite supports conditional statements and while loops. Statement blocks are enclosed in curly braces <code>{ }</code>.
+    </p>
+    <h3>Conditional Statements</h3>
+    <p>
+        Conditionals are structured using <code>if</code>, optional <code>else if</code>, and optional <code>else</code> blocks. Parentheses around conditions are permitted but optional:
+    </p>
+    <pre><code>if (value > 100) {
+    echo "Value exceeds limit" endl;
+} else if value > 50 {
+    echo "Value is acceptable" endl;
+} else {
+    echo "Value is low" endl;
 }</code></pre>
 
-            <h3>Loops (While)</h3>
-            <p>Iterates a statement block as long as the condition evaluates to non-zero (or true).</p>
-            <pre><code><span class="token-type">int</span> idx = 1;
-<span class="token-keyword">while</span> idx <= 5 {
-    echo "Count: " + idx endl;
-    idx = idx + 1;
+    <h3>While Loops</h3>
+    <p>
+        Loops execute their body as long as the condition evaluates to a non-zero (or true) value:
+    </p>
+    <pre><code>int i = 0;
+while i < 3 {
+    echo i;
+    i = i + 1;
 }</code></pre>
 
-            <div class="callout">
-                <div class="callout-title">The `echo` & `endl` Statements</div>
-                <p>The <code>echo</code> instruction evaluates an expression and outputs it to the terminal. By appending the <code>endl</code> keyword, you append newlines. E.g., <code>echo "Hello" endl endl;</code> prints "Hello" followed by three newlines (since the initial echo already appends one newline by default).</p>
-            </div>
-        </section>
+    <!-- Section 6 -->
+    <h2 id="6-scoping-rules">6. Scoping Rules</h2>
+    <p>
+        C-Lite implements <strong>lexical scoping</strong> using a stack-based symbol table.
+    </p>
+    <ul>
+        <li><strong>Block Creation</strong>: Nested scopes are created inside curly braces <code>{ }</code>. Variables declared inside a block belong to that local depth level.</li>
+        <li><strong>Variable Shadowing</strong>: Variables in an inner block shadow variables in outer blocks sharing the same identifier name.</li>
+        <li><strong>Cleanup on Exit</strong>: When execution exits a block, the scope depth decreases, and all variables declared at that depth are discarded from the stack.</li>
+    </ul>
+    <pre><code>int x = 10;
+if true {
+    int x = 20; // Shadows global x
+    echo x; // Prints 20
+}
+echo x; // Prints 10 (global value is preserved)</code></pre>
 
-        <!-- Scoping & Shadowing -->
-        <section id="scoping">
-            <h2>Scoping & Shadowing</h2>
-            <p>C-Lite enforces strict **lexical, block-level scoping** using a symbol stack table:</p>
-            <ul>
-                <li><strong>Block Creation</strong>: Every bracket pair <code>{ }</code> increments the lexical scope depth.</li>
-                <li><strong>Shadowing</strong>: Declarations in inner blocks shadow declarations in outer blocks if they share the same name.</li>
-                <li><strong>Scope Exit</strong>: When a block ends, all variables declared within that block are popped off the symbol stack.</li>
-            </ul>
-
-            <pre><code><span class="token-type">int</span> val = 100;
-echo "Outer val: " + val endl; <span class="token-comment">// prints 100</span>
-
-<span class="token-keyword">if</span> <span class="token-boolean">true</span> {
-    <span class="token-type">int</span> val = 50; <span class="token-comment">// Shadows outer 'val'</span>
-    <span class="token-type">int</span> temp = 999;
-    echo "Inner val: " + val endl; <span class="token-comment">// prints 50</span>
-    echo "Inner temp: " + temp endl; <span class="token-comment">// prints 999</span>
+    <!-- Section 7 -->
+    <h2 id="7-procedures">7. Procedures (Functions)</h2>
+    <p>
+        C-Lite supports declaring and invoking user-defined subroutines. These function structures do not return values (there are no return statements implemented) and act as procedures.
+    </p>
+    <p>
+        Procedures are declared using an identifier name, parameter lists, and a body block:
+    </p>
+    <pre><code>printSum(int valA, int valB) {
+    int result = valA + valB;
+    echo "Sum is: " + result endl;
 }
 
-echo "Outer val restored: " + val endl; <span class="token-comment">// prints 100</span>
-<span class="token-comment">// echo temp; // Compiler Error: 'temp' is out of scope!</span></code></pre>
-        </section>
+printSum(12, 8); // Sum is: 20</code></pre>
 
-        <!-- Functions -->
-        <section id="functions">
-            <h2>Functions / Procedures</h2>
-            <p>Functions allow reusable blocks of code. They behave as procedures (they cannot return values, and return statements are not implemented).</p>
+    <div class="note-box warning">
+        <div class="note-box-title">Important Parameter Scoping Quirk</div>
+        <p>
+            Function parameters are evaluated and inserted into the symbol table <strong>before</strong> the function body block is executed. Consequently, parameters are bound at the <strong>caller's scope depth level</strong> rather than the function's internal scope depth level.
+        </p>
+        <p>
+            This leads to two critical behaviors:
+        </p>
+        <ul>
+            <li><strong>Re-declaration clash</strong>: If a parameter name matches a variable defined in the caller's environment, a "Redeclared in same scope!" error occurs.</li>
+            <li><strong>Parameter leak</strong>: Parameters are not cleaned up when the function returns, remaining active in the caller's environment.</li>
+        </ul>
+        <p>
+            <strong>Best Practice:</strong> Always use unique parameter names (e.g., <code>fn_arg_val</code>) to prevent naming conflicts with calling scopes.
+        </p>
+    </div>
 
-            <h3>Function Definition & Invocation</h3>
-            <p>Functions are defined using an identifier followed by parameters (with explicit types) and a code block. Return types are omitted.</p>
-            <pre><code><span class="token-comment">// Declaration</span>
-calculateSum(<span class="token-type">int</span> valA, <span class="token-type">int</span> valB) {
-    <span class="token-type">int</span> sum = valA + valB;
-    echo "The sum is: " + sum endl;
-}
+    <!-- Section 8 -->
+    <h2 id="8-implicit-conversions">8. Implicit Type Conversions</h2>
+    <p>
+        The interpreter supports several implicit type coercions to simplify scripts:
+    </p>
+    <ul>
+        <li><strong>String to Int</strong>: Assigning a string to an integer yields the length of the string:
+            <pre><code>string text = "Hello";
+int size = text; // size is assigned 5</code></pre>
+        </li>
+        <li><strong>String to Char</strong>: Assigning a string to a character yields the first character of the string:
+            <pre><code>string text = "Hello";
+char letter = text; // letter is assigned 'H'</code></pre>
+        </li>
+        <li><strong>Char to String (Concatenation)</strong>: Summing two characters produces a two-character string:
+            <pre><code>char a = 'C';
+char b = 'L';
+string result = a + b; // result evaluates to "CL"</code></pre>
+        </li>
+        <li><strong>Mixed-Type Concatenation</strong>: Adding a string to any other primitive (int, bool, char) formats the primitive and concatenates them:
+            <pre><code>echo "The count is: " + 42 endl;</code></pre>
+        </li>
+    </ul>
 
-<span class="token-comment">// Invocation</span>
-calculateSum(15, 30);</code></pre>
+    <div class="note-box warning">
+        <div class="note-box-title">Coercion Limits (Interpreter Crash)</div>
+        <p>
+            Implicitly converting non-string primitive values directly to a string variable (e.g., <code>string s = 10;</code>) is not supported and will result in a <strong>Segmentation Fault</strong>.
+        </p>
+        <p>
+            <strong>Workaround:</strong> To assign a primitive to a string variable, concatenate the primitive with an empty string: <code>string s = "" + 10;</code>.
+        </p>
+    </div>
 
-            <div class="callout warning">
-                <div class="callout-title">Critical Scoping Quirk for Function Parameters</div>
-                <p>Function arguments are evaluated and inserted into the symbol table <strong>before</strong> entering the function body block. As a result, they are bound at the **caller's depth level** (e.g., depth 0 if called from global scope).</p>
-                <ul>
-                    <li><strong>Conflict Hazard</strong>: Calling a function with a parameter name that already exists in the caller's scope will trigger a <code>Error: Redeclared in same scope!</code> crash.</li>
-                    <li><strong>Parameter Leakage</strong>: Upon function exit, parameters are not cleared and remain active in the caller's scope.</li>
-                    <li><strong>Best Practice</strong>: Always name function parameters uniquely (e.g., prefixing them as <code>fnParamVal</code>) to avoid scope conflicts.</li>
-                </ul>
-            </div>
-        </section>
+    <footer>
+        C-Lite Technical Documentation Index &bull; Surya Prakash J
+    </footer>
+</div>
 
-        <!-- Type Conversions -->
-        <section id="type-conversions">
-            <h2>Type Coercion & Coercion Limits</h2>
-            <p>C-Lite provides built-in implicit type coercions. However, because it is compiled under C-style structures, some conversion paths are illegal and crash the interpreter.</p>
-
-            <h3>Working Implicit Conversions</h3>
-            <ul>
-                <li><strong>String to Int</strong>: Returns the length of the string.
-                    <pre><code><span class="token-type">string</span> s = "Antigravity";
-<span class="token-type">int</span> len = s; <span class="token-comment">// len becomes 11</span></code></pre>
-                </li>
-                <li><strong>String to Char</strong>: Returns the first character of the string.
-                    <pre><code><span class="token-type">string</span> s = "Hello";
-<span class="token-type">char</span> c = s; <span class="token-comment">// c becomes 'H'</span></code></pre>
-                </li>
-                <li><strong>Char + Char Concatenation</strong>: Concatenating two characters yields a new 2-character string.
-                    <pre><code><span class="token-type">char</span> c1 = 'X';
-<span class="token-type">char</span> c2 = 'Y';
-<span class="token-type">string</span> pair = c1 + c2; <span class="token-comment">// pair becomes "XY"</span></code></pre>
-                </li>
-                <li><strong>Mixed-Type Concatenation</strong>: Adding string to primitives formats the primitive value automatically as text.
-                    <pre><code>echo "Score: " + 100; <span class="token-comment">// yields "Score: 100"</span></code></pre>
-                </li>
-            </ul>
-
-            <div class="callout warning">
-                <div class="callout-title">Forbidden Conversion (Interpreter Crash)</div>
-                <p>Assigning a primitive value directly to a string variable (e.g. <code>string s = 10;</code>) is not supported and causes a **Segmentation Fault**.</p>
-                <p><strong>Workaround</strong>: Concatenate the primitive with an empty string: <code>string s = "" + 10;</code>. This handles the conversion safely.</p>
-            </div>
-        </section>
-
-        <footer>
-            <p>C-Lite Programming Language Documentation &bull; Surya Prakash J</p>
-        </footer>
-    </main>
-
-    <!-- Simple Active Link Scroll Highlighting -->
-    <script>
-        const links = document.querySelectorAll('.nav-links a');
-        const sections = document.querySelectorAll('section');
-
-        window.addEventListener('scroll', () => {
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (pageYOffset >= (sectionTop - 150)) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            links.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href').substring(1) === current) {
-                    link.classList.add('active');
-                }
-            });
-        });
-    </script>
 </body>
 </html>
