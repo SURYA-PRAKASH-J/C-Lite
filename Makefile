@@ -34,3 +34,4 @@ $(WIN_OUT): $(SRC) $(HDR)
 
 clean:
 	rm -rf $(BUILD_DIR)
+	
