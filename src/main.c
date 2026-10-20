@@ -32,8 +32,8 @@ int main(int argc, char *argv[]) {
     return 1;
   }
   if(argc == 2){
-    if(strcmp(argv[1], "-v")){
-      printf("Version: %d", &VERSION);
+    if(strcmp(argv[1], "-v")==0){
+      printf("Version: %.1f\n", VERSION);
       return 0;
     }
   }
