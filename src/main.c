@@ -18,10 +18,24 @@ Updating this everytime i get a segfaults from now on
 [added pretty late but i rememebered the count]
 SEGFAULTs = 7
 */
+
+
+// Oh wait does this limits me from adding sub versions? 
+// I don't know what it's called, that we use like 1.3.2
+// nah i ain't gonna use (prolly not)
+const float VERSION = 1.3;
+
+
 int main(int argc, char *argv[]) {
   if (argc < 2) {
-    printf("Usage: <filename>.cl [--debug]\n");
+    printf("Usage: <filename>.cl [--debug] [-v]\n");
     return 1;
+  }
+  if(argc == 2){
+    if(strcmp(argv[1], "-v")){
+      printf("Version: %d", &VERSION);
+      return 0;
+    }
   }
   if (argc >= 3 && strcmp(argv[2], "--debug") == 0) {
     LEXER_DEBUG = 1;
