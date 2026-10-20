@@ -1,8 +1,7 @@
-int x = 10;
-int y = 20;
+string x = "pcdoc";
 
-mul(int a, int b){
-    echo a*b;
+print(string y){
+    echo y;
 }
 
-mul(x, y);
+print(x);

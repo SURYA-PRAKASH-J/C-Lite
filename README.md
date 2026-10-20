@@ -79,8 +79,12 @@ C-Lite/
 Ensure you have `gcc` and `make` installed.
 
 ```bash
-make
+make win
+
+make linux
 ```
+
+This builds the exectuable in `/build/` folder
 
 ### Running
 
